@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNAO Admin Panel</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050816;
+color:white;
+min-height:100vh;
+padding:18px;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top,#00ffd522,transparent 40%),
+radial-gradient(circle at bottom,#0088ff22,transparent 40%);
+z-index:-1;
+}
+
+.header{
+padding:20px;
+border-radius:26px;
+background:linear-gradient(145deg,#0b132b,#111c44);
+border:1px solid #24325d;
+box-shadow:0 0 30px #00ffd522;
+margin-bottom:16px;
+}
+
+.header h1{
+font-size:28px;
+color:#00ffd5;
+}
+
+.header p{
+opacity:.75;
+margin-top:8px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-bottom:16px;
+}
+
+.stat{
+background:#0f172e;
+border:1px solid #1f2a4f;
+border-radius:20px;
+padding:16px;
+}
+
+.stat p{
+font-size:12px;
+opacity:.7;
+}
+
+.stat b{
+font-size:24px;
+color:#00ffd5;
+margin-top:6px;
+display:block;
+}
+
+.card{
+background:#0f172e;
+border:1px solid #1f2a4f;
+border-radius:22px;
+padding:16px;
+margin-bottom:16px;
+}
+
+.card h2{
+font-size:20px;
+margin-bottom:12px;
+color:#00ffd5;
+}
+
+.item{
+background:#091225;
+border:1px solid #24325d;
+border-radius:18px;
+padding:14px;
+margin-top:12px;
+word-break:break-word;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin-top:7px;
+font-size:13px;
+}
+
+.row span{
+opacity:.7;
+}
+
+.row b{
+color:#00ffd5;
+text-align:right;
+}
+
+.btn{
+width:100%;
+border:none;
+border-radius:16px;
+padding:13px;
+font-weight:900;
+background:linear-gradient(135deg,#00ffd5,#00a2ff);
+color:#00131a;
+margin-top:10px;
+cursor:pointer;
+}
+
+.pending{
+color:#ffcc66;
+}
+
+.approved{
+color:#00ffd5;
+}
+
+.muted{
+opacity:.7;
+font-size:13px;
+line-height:1.4;
+}
+
+@media(max-width:720px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>🌊 SNAO Admin Panel</h1>
+<p>Approve VIP payments and monitor users.</p>
+
+<button class="btn" onclick="loadAdmin()">
+REFRESH ADMIN DATA
+</button>
+</div>
+
+<div class="grid">
+
+<div class="stat">
+<p>Total Users</p>
+<b id="totalUsers">0</b>
+</div>
+
+<div class="stat">
+<p>Total Payments</p>
+<b id="totalPayments">0</b>
+</div>
+
+<div class="stat">
+<p>Pending</p>
+<b id="pendingPayments">0</b>
+</div>
+
+<div class="stat">
+<p>Approved</p>
+<b id="approvedPayments">0</b>
+</div>
+
+</div>
+
+<div class="card">
+<h2>⏳ Pending Payments</h2>
+
+<div id="pendingList"></div>
+</div>
+
+<div class="card">
+<h2>✅ Approved Payments</h2>
+
+<div id="approvedList"></div>
+</div>
+
+<div class="card">
+<h2>👥 Users</h2>
+
+<div id="usersList"></div>
+</div>
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+function paymentHTML(payment){
+
+return `
+<div class="item">
+
+<div class="row">
+<span>User</span>
+<b>${payment.user_id}</b>
+</div>
+
+<div class="row">
+<span>Plan</span>
+<b>${payment.plan_name}</b>
+</div>
+
+<div class="row">
+<span>Amount</span>
+<b>${payment.amount} USDT</b>
+</div>
+
+<div class="row">
+<span>Status</span>
+<b class="${payment.status}">
+${payment.status}
+</b>
+</div>
+
+${
+payment.status === "pending"
+?
+`<button class="btn" onclick="approvePayment('${payment.payment_id}')">
+APPROVE VIP
+</button>`
+:
+""
+}
+
+</div>
+`;
+}
+
+function userHTML(id,user){
+
+return `
+<div class="item">
+
+<div class="row">
+<span>User</span>
+<b>${id}</b>
+</div>
+
+<div class="row">
+<span>Balance</span>
+<b>${Number(user.balance || 0).toFixed(5)}</b>
+</div>
+
+<div class="row">
+<span>VIP</span>
+<b>${user.active_vip_plan || "free"}</b>
+</div>
+
+<div class="row">
+<span>Pending</span>
+<b>${user.pending_vip_plan || "-"}</b>
+</div>
+
+</div>
+`;
+}
+
+async function loadAdmin(){
+
+try{
+
+let response = await fetch(API_URL + "/admin-summary");
+
+let data = await response.json();
+
+let users = data.users || {};
+let payments = data.payments || {};
+
+let paymentArray = Object.values(payments);
+
+let pending = paymentArray.filter(
+p => p.status === "pending"
+);
+
+let approved = paymentArray.filter(
+p => p.status === "approved"
+);
+
+document.getElementById("totalUsers").innerText =
+Object.keys(users).length;
+
+document.getElementById("totalPayments").innerText =
+paymentArray.length;
+
+document.getElementById("pendingPayments").innerText =
+pending.length;
+
+document.getElementById("approvedPayments").innerText =
+approved.length;
+
+document.getElementById("pendingList").innerHTML =
+pending.map(paymentHTML).join("");
+
+document.getElementById("approvedList").innerHTML =
+approved.map(paymentHTML).join("");
+
+document.getElementById("usersList").innerHTML =
+Object.keys(users)
+.map(id => userHTML(id, users[id]))
+.join("");
+
+let userArray = Object.values(users);
+
+let vipActive = userArray.filter(u =>
+u.active_vip_plan && u.active_vip_plan !== "free"
+).length;
+
+let totalReferrals = userArray.reduce((sum,u) =>
+sum + (u.referral_count || (u.referrals ? u.referrals.length : 0)), 0
+);
+
+console.log("VIP active:", vipActive);
+console.log("Total referrals:", totalReferrals);
+console.log("Admin stats loaded");
+
+}catch(err){
+
+alert("Backend offline");
+
+}
+
+}
+
+async function approvePayment(paymentId){
+
+try{
+
+let paymentResponse = await fetch(API_URL + "/payments");
+let paymentData = await paymentResponse.json();
+
+let payments = paymentData.payments || paymentData;
+
+let payment = payments[paymentId];
+
+if(!payment){
+alert("Payment not found");
+return;
+}
+
+let planKey = payment.plan_key;
+
+if(!planKey){
+let name = (payment.plan_name || "").toLowerCase();
+
+if(name.includes("bronze")) planKey = "bronze";
+else if(name.includes("silver")) planKey = "silver";
+else if(name.includes("gold")) planKey = "gold";
+else if(name.includes("diamond")) planKey = "diamond";
+else if(name.includes("magnate")) planKey = "magnate";
+else planKey = "free";
+}
+
+let response = await fetch(API_URL + "/approve-payment",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+user_id:payment.user_id,
+plan_key:planKey
+})
+});
+
+let data = await response.json();
+
+if(data.success){
+alert("VIP approved successfully");
+loadAdmin();
+}else{
+alert("Approval failed");
+}
+
+}catch(err){
+console.log(err);
+alert("Approval failed. Check console/backend.");
+}
+
+}
+
+loadAdmin();
+
+</script>
+</body>
+</html>

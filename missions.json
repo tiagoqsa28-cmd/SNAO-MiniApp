@@ -1,0 +1,135 @@
+{
+    "user_312248590_twitter_2026-05-21": {
+        "user_id": "user_312248590",
+        "mission_type": "twitter",
+        "reward": 500.0,
+        "date": "2026-05-21",
+        "claimed_at": "2026-05-21T22:17:53.577878"
+    },
+    "user_977763085_twitter_2026-06-01": {
+        "user_id": "user_977763085",
+        "mission_type": "twitter",
+        "reward": 500.0,
+        "date": "2026-06-01",
+        "claimed_at": "2026-06-01T23:05:07.960935"
+    },
+    "user_977763085_telegram_2026-06-01": {
+        "user_id": "user_977763085",
+        "mission_type": "telegram",
+        "reward": 500.0,
+        "date": "2026-06-01",
+        "claimed_at": "2026-06-01T23:05:12.382523"
+    },
+    "user_977763085_telegram_2026-06-02": {
+        "user_id": "user_977763085",
+        "mission_type": "telegram",
+        "reward": 500.0,
+        "date": "2026-06-02",
+        "claimed_at": "2026-06-02T23:14:37.465002"
+    },
+    "user_977763085_twitter_2026-06-02": {
+        "user_id": "user_977763085",
+        "mission_type": "twitter",
+        "reward": 500.0,
+        "date": "2026-06-02",
+        "claimed_at": "2026-06-02T23:14:38.463072"
+    },
+    "5708661541_telegram_2026-06-06": {
+        "user_id": "5708661541",
+        "mission_type": "telegram",
+        "reward": 500.0,
+        "date": "2026-06-06",
+        "claimed_at": "2026-06-06T23:53:09.334257"
+    },
+    "5708661541_twitter_2026-06-06": {
+        "user_id": "5708661541",
+        "mission_type": "twitter",
+        "reward": 500.0,
+        "date": "2026-06-06",
+        "claimed_at": "2026-06-06T23:53:18.966651"
+    },
+    "user_312248590_telegram_join_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "telegram_join",
+        "reward": 300.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:04:37.869941"
+    },
+    "user_312248590_telegram_like_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "telegram_like",
+        "reward": 200.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:12.637804"
+    },
+    "user_312248590_x_follow_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_follow",
+        "reward": 500.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:19.629111"
+    },
+    "user_312248590_x_like_2046736699489681545_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_like_2046736699489681545",
+        "reward": 30.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:23.147087"
+    },
+    "user_312248590_x_comment_2046736699489681545_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_comment_2046736699489681545",
+        "reward": 60.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:26.280452"
+    },
+    "user_312248590_x_retweet_2046736699489681545_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_retweet_2046736699489681545",
+        "reward": 90.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:28.637879"
+    },
+    "user_312248590_x_like_2045274035316039726_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_like_2045274035316039726",
+        "reward": 30.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:30.185904"
+    },
+    "user_312248590_x_comment_2045274035316039726_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_comment_2045274035316039726",
+        "reward": 60.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:32.274519"
+    },
+    "user_312248590_x_retweet_2045274035316039726_2026-06-13": {
+        "user_id": "user_312248590",
+        "mission_type": "x_retweet_2045274035316039726",
+        "reward": 90.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:06:34.267661"
+    },
+    "user_977763085_telegram_join_2026-06-13": {
+        "user_id": "user_977763085",
+        "mission_type": "telegram_join",
+        "reward": 300.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T22:46:10.625151"
+    },
+    "user_977763085_telegram_like_2026-06-13": {
+        "user_id": "user_977763085",
+        "mission_type": "telegram_like",
+        "reward": 200.0,
+        "date": "2026-06-13",
+        "claimed_at": "2026-06-13T23:03:44.583580"
+    },
+    "user_312248590_telegram_join_2026-06-15": {
+        "user_id": "user_312248590",
+        "mission_type": "telegram_join",
+        "reward": 300.0,
+        "date": "2026-06-15",
+        "claimed_at": "2026-06-15T10:31:46.759824"
+    }
+}

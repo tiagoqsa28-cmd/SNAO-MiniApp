@@ -1,0 +1,7 @@
+{
+    "demo_user_BTC_market_protection": {
+        "user_id": "demo_user",
+        "asset": "BTC",
+        "alert_type": "market_protection"
+    }
+}

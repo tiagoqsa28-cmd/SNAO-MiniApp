@@ -1,0 +1,4006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$SNAO Flow Map</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#030713;color:white;min-height:100vh;overflow-x:hidden;padding:18px}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at top,#00ffd522,transparent 40%),radial-gradient(circle at bottom,#0055ff33,transparent 45%);z-index:-2}
+.scanner-box{
+margin-bottom:18px;
+padding:16px;
+border-radius:22px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd544;
+box-shadow:0 0 25px #00ffd511;
+}
+
+.scanner-top{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:13px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:10px;
+}
+
+.scanner-dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#00ffd5;
+box-shadow:0 0 14px #00ffd5;
+animation:scannerBlink 1s infinite;
+}
+
+@keyframes scannerBlink{
+50%{
+opacity:.4;
+}
+}
+
+.scanner-status{
+font-size:20px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.scanner-desc{
+font-size:13px;
+opacity:.78;
+line-height:1.45;
+}
+.ai-notification{
+position:fixed;
+top:18px;
+left:18px;
+right:18px;
+z-index:1000;
+padding:14px 16px;
+border-radius:18px;
+background:#0b132bee;
+border:1px solid #00ffd555;
+box-shadow:0 0 24px #00ffd522;
+backdrop-filter:blur(12px);
+transform:translateY(-140px);
+opacity:0;
+transition:.45s ease;
+}
+
+.ai-notification.show{
+transform:translateY(0);
+opacity:1;
+}
+
+.ai-notification-title{
+font-size:13px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:5px;
+}
+
+.ai-notification-text{
+font-size:13px;
+line-height:1.4;
+color:#ffcc66;
+}
+.header{padding:22px;border-radius:26px;background:linear-gradient(145deg,#071326,#101a3d);border:1px solid #00ffd533;box-shadow:0 0 30px #00ffd522}
+.header h1{font-size:28px;color:#00ffd5}
+.header p{margin-top:8px;opacity:.75;line-height:1.4}
+.ocean{margin-top:18px;height:520px;border-radius:28px;background:linear-gradient(180deg,#071326,#020814);border:1px solid #1b3b66;position:relative;overflow:hidden;box-shadow:inset 0 0 60px #00ffd511}
+.particles{
+position:absolute;
+inset:0;
+overflow:hidden;
+z-index:1;
+}
+
+.particle{
+position:absolute;
+width:8px;
+height:8px;
+border-radius:50%;
+background:#00ffd5;
+box-shadow:0 0 12px #00ffd5;
+opacity:.7;
+animation:particleFloat linear infinite;
+}
+
+.p1{
+left:12%;
+bottom:20px;
+animation-duration:7s;
+}
+
+.p2{
+left:28%;
+bottom:40px;
+animation-duration:10s;
+width:5px;
+height:5px;
+}
+
+.p3{
+left:45%;
+bottom:10px;
+animation-duration:8s;
+}
+
+.p4{
+left:60%;
+bottom:35px;
+animation-duration:12s;
+width:6px;
+height:6px;
+}
+
+.p5{
+left:76%;
+bottom:25px;
+animation-duration:9s;
+}
+
+.p6{
+left:88%;
+bottom:50px;
+animation-duration:11s;
+width:4px;
+height:4px;
+}
+
+@keyframes particleFloat{
+
+0%{
+transform:translateY(0) scale(1);
+opacity:0;
+}
+
+20%{
+opacity:.8;
+}
+
+100%{
+transform:translateY(-260px) scale(.2);
+opacity:0;
+}
+
+}
+.wave{position:absolute;left:-20%;right:-20%;height:90px;background:#00ffd516;border-radius:50%;animation:wave 5s ease-in-out infinite}
+.wave.one{bottom:30px}
+.wave.two{bottom:80px;animation-delay:1s;opacity:.5}
+@keyframes wave{50%{transform:translateX(40px) translateY(-20px)}}
+.whale{
+position:absolute;
+font-size:70px;
+top:70px;
+left:60px;
+filter:drop-shadow(0 0 22px #00ffd5);
+animation:float 3s ease-in-out infinite;
+z-index:2;
+}
+.sardines{position:absolute;font-size:30px;left:25px;top:190px;animation:moveFish 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px)}}
+@keyframes moveFish{50%{transform:translateX(80px)}}
+.alert{position:absolute;left:18px;right:18px;top:34px;padding:14px;border-radius:18px;background:#ffcc6615;border:1px solid #ffcc6655;color:#ffcc66;font-weight:900}
+.radar-sweep{
+position:absolute;
+width:260px;
+height:260px;
+border-radius:50%;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+border:1px solid #00ffd533;
+z-index:3;
+overflow:hidden;
+box-shadow:0 0 30px #00ffd522;
+}
+
+.radar-sweep::before{
+content:"";
+position:absolute;
+left:50%;
+top:50%;
+width:50%;
+height:2px;
+background:linear-gradient(90deg,#00ffd5,transparent);
+transform-origin:left center;
+animation:radarRotate 3s linear infinite;
+}
+
+.radar-sweep::after{
+content:"";
+position:absolute;
+inset:40px;
+border-radius:50%;
+border:1px solid #00ffd522;
+}
+
+@keyframes radarRotate{
+0%{
+transform:rotate(0deg);
+}
+100%{
+transform:rotate(360deg);
+}
+}
+.pulse{position:absolute;width:150px;height:150px;border-radius:50%;border:2px solid #ff4f6d;left:45%;top:45%;animation:pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(.6);opacity:1}100%{transform:scale(1.8);opacity:0}}
+.ai-feed-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.ai-feed-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:14px;
+}
+
+.ai-feed-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+max-height:220px;
+overflow:hidden;
+}
+
+.ai-feed-item{
+padding:13px 14px;
+border-radius:16px;
+background:#091225;
+border:1px solid #1f2a4f;
+font-size:13px;
+line-height:1.4;
+animation:feedGlow 2.8s ease-in-out infinite;
+}
+
+.ai-feed-item span{
+display:inline-block;
+margin-right:8px;
+padding:4px 7px;
+border-radius:999px;
+background:#00ffd522;
+color:#00ffd5;
+font-size:10px;
+font-weight:900;
+}
+
+.ai-feed-item b{
+color:#ffcc66;
+font-weight:800;
+}
+
+@keyframes feedGlow{
+50%{
+box-shadow:0 0 16px #00ffd522;
+}
+}
+.alert-config-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.alert-config-title{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:8px;
+}
+
+.alert-config-subtitle{
+font-size:13px;
+opacity:.75;
+line-height:1.45;
+margin-bottom:16px;
+}
+
+.alert-options{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.alert-option{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px;
+border-radius:16px;
+background:#091225;
+border:1px solid #1f2a4f;
+font-size:13px;
+font-weight:700;
+}
+
+.alert-option input{
+transform:scale(1.2);
+accent-color:#00ffd5;
+}
+
+.save-alert-btn{
+width:100%;
+margin-top:16px;
+padding:14px;
+border:none;
+border-radius:18px;
+font-weight:900;
+background:linear-gradient(135deg,#00ffd5,#00a2ff);
+color:#00131a;
+cursor:pointer;
+}
+
+.alert-save-status{
+margin-top:12px;
+padding:14px;
+border-radius:16px;
+background:#091225;
+border:1px solid #1f2a4f;
+font-size:13px;
+color:#ffcc66;
+}
+
+.leaderboard-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.leaderboard-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:8px;
+}
+
+.leaderboard-subtitle{
+font-size:13px;
+opacity:.75;
+line-height:1.45;
+margin-bottom:14px;
+}
+
+.leaderboard-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.leaderboard-item{
+display:grid;
+grid-template-columns:48px 1fr;
+gap:10px;
+align-items:center;
+padding:14px;
+border-radius:18px;
+background:#091225;
+border:1px solid #1f2a4f;
+}
+
+.leaderboard-item span{
+grid-row:1 / 3;
+width:42px;
+height:42px;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+}
+
+.leaderboard-item b{
+font-size:16px;
+color:white;
+}
+
+.leaderboard-item small{
+font-size:12px;
+opacity:.75;
+}
+
+.leaderboard-item.first{
+border-color:#ffcc6655;
+box-shadow:0 0 18px #ffcc6622;
+}
+
+.leaderboard-item.second{
+border-color:#8be9ff55;
+}
+
+.leaderboard-item.third{
+border-color:#00ffd555;
+}
+.reputation-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.reputation-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.reputation-profile{
+display:flex;
+align-items:center;
+gap:14px;
+padding:14px;
+border-radius:20px;
+background:#091225;
+border:1px solid #1f2a4f;
+margin-bottom:14px;
+}
+
+.reputation-rank{
+width:58px;
+height:58px;
+border-radius:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+background:#00ffd518;
+border:1px solid #00ffd555;
+box-shadow:0 0 18px #00ffd522;
+}
+
+.reputation-title{
+font-size:18px;
+font-weight:900;
+color:#00ffd5;
+}
+
+.reputation-subtitle{
+font-size:12px;
+opacity:.75;
+line-height:1.4;
+margin-top:4px;
+}
+
+.reputation-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.rep-card{
+padding:14px;
+border-radius:18px;
+background:#0f172e;
+border:1px solid #1f2a4f;
+}
+
+.rep-card span{
+display:block;
+font-size:12px;
+opacity:.7;
+}
+
+.rep-card b{
+display:block;
+margin-top:8px;
+font-size:20px;
+color:#ffcc66;
+}
+
+.rep-progress{
+height:16px;
+border-radius:999px;
+background:#091225;
+border:1px solid #24325d;
+overflow:hidden;
+margin-top:14px;
+}
+
+.rep-progress-fill{
+height:100%;
+width:72%;
+background:linear-gradient(90deg,#00ffd5,#00a2ff);
+transition:.4s;
+}
+
+.rep-note{
+margin-top:12px;
+font-size:13px;
+opacity:.75;
+line-height:1.4;
+color:#ffcc66;
+}
+
+.energy-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.energy-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.energy-card{
+padding:18px;
+border-radius:22px;
+background:#091225;
+border:1px solid #24325d;
+}
+
+.energy-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:14px;
+}
+
+.energy-title{
+font-size:18px;
+font-weight:900;
+color:#00ffd5;
+}
+
+.energy-subtitle{
+font-size:12px;
+opacity:.72;
+margin-top:4px;
+}
+
+.energy-count{
+font-size:24px;
+font-weight:900;
+color:#ffcc66;
+}
+
+.energy-bar{
+height:18px;
+border-radius:999px;
+overflow:hidden;
+background:#050816;
+border:1px solid #24325d;
+}
+
+.energy-fill{
+height:100%;
+width:100%;
+background:linear-gradient(90deg,#00ffd5,#00a2ff);
+transition:.4s;
+}
+
+.energy-status{
+margin-top:12px;
+font-size:13px;
+font-weight:700;
+color:#ffcc66;
+}
+.watchlist-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.watch-title{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:8px;
+}
+
+.watch-subtitle{
+font-size:13px;
+opacity:.75;
+line-height:1.45;
+margin-bottom:14px;
+}
+
+.watch-input{
+width:100%;
+margin-top:10px;
+padding:14px;
+border-radius:16px;
+border:1px solid #24325d;
+background:#091225;
+color:white;
+outline:none;
+font-weight:700;
+}
+
+.watch-btn{
+width:100%;
+margin-top:12px;
+padding:14px;
+border:none;
+border-radius:18px;
+font-weight:900;
+background:linear-gradient(135deg,#00ffd5,#00a2ff);
+color:#00131a;
+cursor:pointer;
+}
+
+.watch-result{
+margin-top:14px;
+padding:16px;
+border-radius:18px;
+background:#091225;
+border:1px solid #1f2a4f;
+font-size:13px;
+line-height:1.5;
+color:#ffcc66;
+}
+.ai-guardian{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#081326,#101a3d);
+border:1px solid #8be9ff55;
+box-shadow:0 0 35px #00ffd511;
+}
+
+.ai-title{
+font-size:20px;
+font-weight:900;
+color:#8be9ff;
+margin-bottom:16px;
+}
+
+.ai-box{
+display:flex;
+gap:16px;
+align-items:center;
+background:#07101f;
+border:1px solid #24325d;
+border-radius:22px;
+padding:16px;
+}
+
+.ai-score{
+min-width:110px;
+width:110px;
+height:110px;
+border-radius:50%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+background:radial-gradient(circle,#ff4f6d44,#07101f 70%);
+border:2px solid #ff4f6d;
+box-shadow:0 0 24px #ff4f6d44;
+flex-shrink:0;
+}
+
+.score-number{
+font-size:34px;
+font-weight:900;
+color:#ff6b88;
+}
+
+.score-label{
+font-size:11px;
+opacity:.8;
+}
+
+.ai-text h3{
+color:#ffcc66;
+font-size:18px;
+margin-bottom:8px;
+}
+
+.ai-text p{
+font-size:13px;
+line-height:1.45;
+opacity:.78;
+}
+
+.ai-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:14px;
+}
+
+.ai-mini{
+background:#0f172e;
+border:1px solid #1f2a4f;
+border-radius:18px;
+padding:14px;
+}
+
+.ai-mini span{
+display:block;
+font-size:12px;
+opacity:.7;
+}
+
+.ai-mini b{
+display:block;
+margin-top:8px;
+font-size:18px;
+color:#00ffd5;
+}
+.ocean-events{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.events-header{
+font-size:18px;
+font-weight:900;
+margin-bottom:16px;
+color:#00ffd5;
+}
+
+.event-list{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.event-card{
+padding:16px;
+border-radius:18px;
+position:relative;
+overflow:hidden;
+}
+
+.event-card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(90deg,transparent,#ffffff10,transparent);
+animation:eventScan 4s linear infinite;
+}
+
+@keyframes eventScan{
+0%{
+left:-100%;
+}
+100%{
+left:100%;
+}
+}
+
+.event-title{
+font-size:16px;
+font-weight:900;
+margin-bottom:6px;
+}
+
+.event-desc{
+font-size:13px;
+opacity:.8;
+line-height:1.4;
+}
+
+.danger-event{
+background:#ff4f6d18;
+border:1px solid #ff4f6d55;
+color:#ff6b88;
+}
+
+.warning-event{
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+}
+
+.smart-event{
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+}
+.news-system{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#081326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.news-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.news-feed{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.news-card{
+padding:16px;
+border-radius:20px;
+position:relative;
+overflow:hidden;
+}
+
+.news-card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(90deg,transparent,#ffffff08,transparent);
+animation:newsScan 5s linear infinite;
+}
+
+@keyframes newsScan{
+0%{
+left:-100%;
+}
+100%{
+left:100%;
+}
+}
+
+.news-impact{
+display:inline-block;
+padding:6px 10px;
+border-radius:999px;
+font-size:11px;
+font-weight:900;
+margin-bottom:10px;
+}
+
+.news-title{
+font-size:16px;
+font-weight:900;
+line-height:1.4;
+margin-bottom:8px;
+}
+
+.news-desc{
+font-size:13px;
+opacity:.78;
+line-height:1.45;
+}
+
+.positive-news{
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+}
+
+.negative-news{
+background:#ff4f6d18;
+border:1px solid #ff4f6d55;
+color:#ff6b88;
+}
+
+.warning-news{
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+}
+.ocean-zones{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.zones-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.zones-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.zone-card{
+padding:16px;
+border-radius:20px;
+position:relative;
+overflow:hidden;
+min-height:132px;
+}
+
+.zone-card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(90deg,transparent,#ffffff08,transparent);
+animation:zoneScan 4s linear infinite;
+}
+
+@keyframes zoneScan{
+0%{left:-100%}
+100%{left:100%}
+}
+
+.zone-title{
+font-size:15px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.zone-assets{
+font-size:18px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.zone-desc{
+font-size:13px;
+opacity:.78;
+line-height:1.4;
+}
+
+.hot-zone{
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+}
+
+.trap-zone{
+background:#ff4f6d18;
+border:1px solid #ff4f6d55;
+color:#ff6b88;
+}
+
+.whale-zone{
+background:#0088ff18;
+border:1px solid #0088ff55;
+color:#6bbcff;
+}
+
+.smart-zone{
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+}
+.smart-money-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.smart-money-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.smart-money-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.smart-money-card{
+padding:16px;
+border-radius:20px;
+position:relative;
+overflow:hidden;
+min-height:130px;
+}
+
+.smart-money-title{
+font-size:13px;
+opacity:.8;
+margin-bottom:8px;
+}
+
+.smart-money-value{
+font-size:28px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.smart-money-desc{
+font-size:13px;
+line-height:1.4;
+opacity:.75;
+}
+
+.smart-money-card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(90deg,transparent,#ffffff08,transparent);
+animation:smartScan 4s linear infinite;
+}
+
+@keyframes smartScan{
+0%{left:-100%}
+100%{left:100%}
+}
+
+.accumulation{
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+}
+
+.distribution{
+background:#ff4f6d18;
+border:1px solid #ff4f6d55;
+color:#ff6b88;
+}
+
+.buy-pressure{
+background:#0088ff18;
+border:1px solid #0088ff55;
+color:#6bbcff;
+}
+
+.sell-pressure{
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+}
+.sentiment-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.sentiment-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.sentiment-card{
+padding:18px;
+border-radius:22px;
+background:#091225;
+border:1px solid #24325d;
+transition:.4s;
+}
+
+.sentiment-top{
+display:flex;
+align-items:center;
+gap:16px;
+}
+
+.sentiment-emoji{
+font-size:52px;
+}
+
+.sentiment-title{
+font-size:22px;
+font-weight:900;
+margin-bottom:6px;
+}
+
+.sentiment-desc{
+font-size:13px;
+opacity:.78;
+line-height:1.45;
+}
+
+.sentiment-bar{
+margin-top:16px;
+height:16px;
+border-radius:999px;
+background:#050816;
+border:1px solid #24325d;
+overflow:hidden;
+}
+
+.sentiment-fill{
+height:100%;
+width:50%;
+background:linear-gradient(90deg,#00ffd5,#00a2ff);
+transition:.4s;
+}
+.shield-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.shield-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.shield-card{
+padding:18px;
+border-radius:22px;
+background:#091225;
+border:1px solid #ffcc6655;
+box-shadow:0 0 22px #ffcc6618;
+transition:.4s;
+}
+
+.shield-level{
+display:inline-block;
+padding:7px 12px;
+border-radius:999px;
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+font-size:12px;
+font-weight:900;
+margin-bottom:12px;
+}
+
+.shield-title{
+font-size:22px;
+font-weight:900;
+margin-bottom:8px;
+color:#ffcc66;
+}
+
+.shield-desc{
+font-size:13px;
+line-height:1.45;
+opacity:.8;
+}
+
+.shield-bar{
+margin-top:16px;
+height:16px;
+border-radius:999px;
+background:#050816;
+border:1px solid #24325d;
+overflow:hidden;
+}
+
+.shield-fill{
+height:100%;
+width:65%;
+background:linear-gradient(90deg,#ffcc66,#ff4f6d);
+transition:.4s;
+}
+
+.missions-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.missions-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:8px;
+}
+
+.missions-subtitle{
+font-size:13px;
+opacity:.75;
+line-height:1.45;
+margin-bottom:16px;
+}
+
+.mission-list{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.mission-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-radius:18px;
+background:#091225;
+border:1px solid #24325d;
+}
+
+.mission-card.done{
+border-color:#00ffd555;
+box-shadow:0 0 18px #00ffd522;
+}
+
+.mission-left{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.mission-icon{
+width:48px;
+height:48px;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+background:#00ffd518;
+border:1px solid #00ffd555;
+}
+
+.mission-title{
+font-size:15px;
+font-weight:900;
+margin-bottom:4px;
+}
+
+.mission-desc{
+font-size:12px;
+opacity:.72;
+}
+
+.mission-xp{
+font-size:14px;
+font-weight:900;
+color:#ffcc66;
+}
+
+.xp-box{
+margin-top:18px;
+padding:16px;
+border-radius:20px;
+background:#091225;
+border:1px solid #24325d;
+}
+
+.xp-label{
+font-size:13px;
+opacity:.8;
+margin-bottom:10px;
+}
+
+.xp-bar{
+height:16px;
+border-radius:999px;
+overflow:hidden;
+background:#050816;
+border:1px solid #24325d;
+}
+
+.xp-fill{
+height:100%;
+width:78%;
+background:linear-gradient(90deg,#00ffd5,#00a2ff);
+transition:.4s;
+}
+
+.xp-text{
+margin-top:10px;
+font-size:13px;
+font-weight:700;
+color:#ffcc66;
+}
+
+.launch-box{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#071326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.launch-header{
+font-size:20px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:16px;
+}
+
+.launch-score{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:22px;
+border-radius:22px;
+background:#091225;
+border:1px solid #24325d;
+margin-bottom:14px;
+}
+
+.launch-number{
+font-size:46px;
+font-weight:900;
+color:#00ffd5;
+}
+
+.launch-label{
+font-size:13px;
+opacity:.75;
+margin-top:4px;
+}
+
+.launch-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.launch-item{
+padding:14px;
+border-radius:18px;
+background:#091225;
+border:1px solid #1f2a4f;
+}
+
+.launch-item span{
+display:block;
+font-size:12px;
+opacity:.75;
+}
+
+.launch-item b{
+display:block;
+font-size:17px;
+margin-top:8px;
+}
+
+.launch-item.ready b{
+color:#00ffd5;
+}
+
+.launch-item.beta b{
+color:#8be9ff;
+}
+.market-pulse{
+margin-top:18px;
+padding:18px;
+border-radius:26px;
+background:linear-gradient(145deg,#081326,#101a3d);
+border:1px solid #00ffd533;
+box-shadow:0 0 30px #00ffd511;
+}
+
+.pulse-header{
+font-size:18px;
+font-weight:900;
+margin-bottom:16px;
+color:#00ffd5;
+}
+
+.pulse-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.pulse-card{
+padding:16px;
+border-radius:18px;
+font-weight:700;
+position:relative;
+overflow:hidden;
+}
+
+.pulse-card::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(90deg,transparent,#ffffff08,transparent);
+animation:scan 3s linear infinite;
+}
+
+@keyframes scan{
+0%{transform:translateX(-100%)}
+100%{transform:translateX(100%)}
+}
+
+.pulse-label{
+font-size:12px;
+opacity:.7;
+}
+
+.pulse-value{
+font-size:22px;
+margin-top:8px;
+font-weight:900;
+}
+
+.pulse-card.bullish{
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+}
+
+.pulse-card.danger{
+background:#ff4f6d18;
+border:1px solid #ff4f6d55;
+color:#ff6b88;
+}
+
+.pulse-card.smart{
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+}
+
+.pulse-card.whale-pulse{
+background:#0088ff18;
+border:1px solid #0088ff55;
+color:#6bbcff;
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.card{background:#0f172e;border:1px solid #1f2a4f;border-radius:22px;padding:16px}
+.card h3{color:#00ffd5;font-size:16px}
+.value{font-size:26px;font-weight:900;margin-top:8px}
+.danger{color:#ff4f6d}
+.good{color:#00ffd5}
+.warn{color:#ffcc66}
+.pulse2{
+animation-delay:.7s;
+border-color:#00ffd5;
+}
+
+.pulse3{
+animation-delay:1.4s;
+border-color:#ffcc66;
+}
+
+.live-alerts{
+position:absolute;
+right:12px;
+top:165px;
+display:flex;
+flex-direction:column;
+gap:10px;
+z-index:5;
+width:190px;
+}
+
+.live-item{
+padding:8px 10px;
+border-radius:14px;
+font-size:11px;
+font-weight:700;
+backdrop-filter:blur(8px);
+animation:floatAlert 3s ease-in-out infinite;
+}
+
+.live-item.whale{
+background:#00ffd518;
+border:1px solid #00ffd555;
+color:#00ffd5;
+position:relative;
+margin-top:0;
+top:auto;
+right:auto;
+left:auto;
+bottom:auto;
+}
+
+.live-item.danger{
+background:#ff4f6d18;
+border:1px solid #ff4f6d55;
+color:#ff6b88;
+}
+
+.live-item.flow{
+background:#0088ff18;
+border:1px solid #0088ff55;
+color:#6bbcff;
+}
+
+.live-item.smart{
+background:#ffcc6618;
+border:1px solid #ffcc6655;
+color:#ffcc66;
+}
+
+@keyframes floatAlert{
+50%{
+transform:translateY(-4px);
+}
+}
+
+.whale-node{
+position:absolute;
+width:22px;
+height:22px;
+border-radius:50%;
+background:#00ffd5;
+box-shadow:
+0 0 12px #00ffd5,
+0 0 25px #00ffd5;
+z-index:4;
+animation:whalePulse 3s infinite;
+}
+
+.whale-node1{
+top:90px;
+left:30%;
+}
+
+.whale-node2{
+top:180px;
+left:68%;
+background:#ffcc66;
+box-shadow:
+0 0 12px #ffcc66,
+0 0 25px #ffcc66;
+animation-delay:1s;
+}
+
+.whale-node3{
+top:250px;
+left:50%;
+background:#ff4f6d;
+box-shadow:
+0 0 12px #ff4f6d,
+0 0 25px #ff4f6d;
+animation-delay:2s;
+}
+
+@keyframes whalePulse{
+
+0%{
+transform:scale(1);
+opacity:.7;
+}
+
+50%{
+transform:scale(1.35);
+opacity:1;
+}
+
+100%{
+transform:scale(1);
+opacity:.7;
+}
+
+}
+
+.liquidity-stream{
+position:absolute;
+height:2px;
+background:linear-gradient(90deg,
+transparent,
+#00ffd5,
+transparent);
+z-index:3;
+opacity:.6;
+animation:streamMove 4s linear infinite;
+}
+
+.stream1{
+width:180px;
+top:110px;
+left:25%;
+transform:rotate(18deg);
+}
+
+.stream2{
+width:140px;
+top:210px;
+left:48%;
+transform:rotate(-12deg);
+animation-delay:1s;
+}
+
+.stream3{
+width:200px;
+top:280px;
+left:18%;
+transform:rotate(8deg);
+animation-delay:2s;
+}
+
+@keyframes streamMove{
+
+0%{
+opacity:0;
+transform:translateX(-20px);
+}
+
+50%{
+opacity:.8;
+}
+
+100%{
+opacity:0;
+transform:translateX(20px);
+}
+
+}
+
+.sardine-dot{
+position:absolute;
+width:7px;
+height:7px;
+border-radius:50%;
+background:#8be9ff;
+box-shadow:0 0 10px #8be9ff;
+z-index:4;
+animation:sardineSwim 6s ease-in-out infinite;
+}
+
+.sd1{top:190px;left:18%;animation-delay:.1s}
+.sd2{top:205px;left:22%;animation-delay:.4s}
+.sd3{top:215px;left:27%;animation-delay:.7s}
+.sd4{top:230px;left:32%;animation-delay:1s}
+.sd5{top:245px;left:36%;animation-delay:1.3s}
+.sd6{top:210px;left:42%;animation-delay:1.6s}
+.sd7{top:225px;left:46%;animation-delay:1.9s}
+.sd8{top:240px;left:51%;animation-delay:2.2s}
+
+@keyframes sardineSwim{
+
+0%{
+transform:translateX(0) translateY(0);
+opacity:.35;
+}
+
+50%{
+transform:translateX(55px) translateY(-12px);
+opacity:1;
+}
+
+100%{
+transform:translateX(0) translateY(0);
+opacity:.35;
+}
+
+}
+
+.trap-zone-area{
+position:absolute;
+border-radius:50%;
+background:radial-gradient(circle,
+rgba(255,79,109,.35),
+transparent 70%);
+border:1px solid #ff4f6d55;
+box-shadow:
+0 0 25px #ff4f6d33,
+inset 0 0 25px #ff4f6d22;
+z-index:2;
+animation:trapPulse 4s ease-in-out infinite;
+}
+
+.trap1{
+width:140px;
+height:140px;
+top:70px;
+right:40px;
+}
+
+.trap2{
+width:110px;
+height:110px;
+bottom:45px;
+left:35px;
+animation-delay:2s;
+}
+
+@keyframes trapPulse{
+
+0%{
+transform:scale(1);
+opacity:.35;
+}
+
+50%{
+transform:scale(1.15);
+opacity:.7;
+}
+
+100%{
+transform:scale(1);
+opacity:.35;
+}
+
+}
+
+.flow-intensity-box{
+position:absolute;
+left:18px;
+bottom:18px;
+width:220px;
+padding:12px;
+border-radius:16px;
+background:#071326cc;
+border:1px solid #00ffd544;
+box-shadow:0 0 20px #00ffd522;
+z-index:6;
+backdrop-filter:blur(8px);
+}
+
+.flow-intensity-title{
+font-size:12px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:8px;
+}
+
+.flow-intensity-bar{
+height:12px;
+border-radius:999px;
+background:#050816;
+border:1px solid #24325d;
+overflow:hidden;
+}
+
+.flow-intensity-fill{
+height:100%;
+width:45%;
+background:linear-gradient(90deg,#00ffd5,#00a2ff);
+transition:.4s;
+}
+
+.flow-intensity-text{
+margin-top:8px;
+font-size:11px;
+color:#ffcc66;
+line-height:1.3;
+}
+
+.ocean-status-panel{
+margin-top:16px;
+width:100%;
+padding:12px;
+border-radius:16px;
+background:#071326cc;
+border:1px solid #00ffd544;
+box-shadow:0 0 20px #00ffd522;
+backdrop-filter:blur(8px);
+}
+
+.ocean-status-title{
+font-size:12px;
+font-weight:900;
+color:#00ffd5;
+margin-bottom:10px;
+}
+
+.ocean-status-row{
+display:flex;
+justify-content:space-between;
+gap:8px;
+font-size:11px;
+padding:6px 0;
+border-bottom:1px solid #ffffff12;
+}
+
+.ocean-status-row:last-child{
+border-bottom:none;
+}
+
+.ocean-status-row span{
+opacity:.7;
+}
+
+.ocean-status-row b{
+color:#ffcc66;
+text-align:right;
+}
+
+.deep-glow{
+position:absolute;
+border-radius:50%;
+filter:blur(45px);
+opacity:.22;
+z-index:0;
+animation:deepGlowMove 12s ease-in-out infinite;
+}
+
+.glow1{
+width:240px;
+height:240px;
+background:#00ffd5;
+top:-80px;
+left:-40px;
+}
+
+.glow2{
+width:280px;
+height:280px;
+background:#0088ff;
+bottom:-120px;
+right:-80px;
+animation-delay:4s;
+}
+
+.glow3{
+width:180px;
+height:180px;
+background:#ff4f6d;
+top:120px;
+right:20%;
+animation-delay:8s;
+}
+
+@keyframes deepGlowMove{
+
+0%{
+transform:translateY(0) translateX(0) scale(1);
+}
+
+25%{
+transform:translateY(-15px) translateX(10px) scale(1.08);
+}
+
+50%{
+transform:translateY(10px) translateX(-10px) scale(.96);
+}
+
+75%{
+transform:translateY(-8px) translateX(15px) scale(1.04);
+}
+
+100%{
+transform:translateY(0) translateX(0) scale(1);
+}
+
+}
+
+.current-line{
+position:absolute;
+height:1px;
+background:linear-gradient(90deg,transparent,#8be9ff,transparent);
+z-index:1;
+opacity:.4;
+animation:currentMove 7s linear infinite;
+}
+
+.current1{
+width:260px;
+top:80px;
+left:-60px;
+}
+
+.current2{
+width:220px;
+top:150px;
+right:-50px;
+animation-delay:1.5s;
+}
+
+.current3{
+width:300px;
+top:230px;
+left:-80px;
+animation-delay:3s;
+}
+
+.current4{
+width:180px;
+top:310px;
+right:-40px;
+animation-delay:4.5s;
+}
+
+@keyframes currentMove{
+
+0%{
+transform:translateX(-40px);
+opacity:0;
+}
+
+30%{
+opacity:.6;
+}
+
+100%{
+transform:translateX(90px);
+opacity:0;
+}
+
+}
+
+.market-storm{
+position:absolute;
+width:2px;
+height:70px;
+background:linear-gradient(180deg,transparent,#ff4f6d,transparent);
+z-index:5;
+opacity:0;
+animation:stormFlash 5s ease-in-out infinite;
+}
+
+.storm1{
+top:40px;
+left:35%;
+}
+
+.storm2{
+top:120px;
+left:62%;
+animation-delay:1.4s;
+}
+
+.storm3{
+top:210px;
+left:48%;
+animation-delay:2.8s;
+}
+
+@keyframes stormFlash{
+
+0%,70%,100%{
+opacity:0;
+transform:scaleY(.6);
+}
+
+75%{
+opacity:.8;
+transform:scaleY(1.2);
+box-shadow:0 0 18px #ff4f6d;
+}
+
+80%{
+opacity:.2;
+}
+
+85%{
+opacity:1;
+box-shadow:0 0 28px #ff4f6d;
+}
+
+}
+
+.risk-heat-layer{
+position:absolute;
+border-radius:50%;
+background:radial-gradient(circle,
+rgba(255,204,102,.28),
+rgba(255,79,109,.18),
+transparent 70%);
+filter:blur(8px);
+z-index:1;
+opacity:.35;
+animation:riskHeatPulse 6s ease-in-out infinite;
+}
+
+.heat1{
+width:220px;
+height:220px;
+top:35px;
+right:-40px;
+}
+
+.heat2{
+width:180px;
+height:180px;
+bottom:25px;
+left:-30px;
+animation-delay:3s;
+}
+
+@keyframes riskHeatPulse{
+
+0%{
+transform:scale(1);
+opacity:.25;
+}
+
+50%{
+transform:scale(1.15);
+opacity:.55;
+}
+
+100%{
+transform:scale(1);
+opacity:.25;
+}
+
+}
+
+.ai-focus-ring{
+position:absolute;
+width:190px;
+height:190px;
+border-radius:50%;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+border:2px solid #8be9ff66;
+box-shadow:
+0 0 25px #8be9ff44,
+inset 0 0 25px #8be9ff22;
+z-index:4;
+animation:focusRingPulse 4s ease-in-out infinite;
+}
+
+.ai-focus-ring::before{
+content:"";
+position:absolute;
+inset:28px;
+border-radius:50%;
+border:1px dashed #00ffd577;
+animation:focusRotate 8s linear infinite;
+}
+
+.ai-focus-core{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:48px;
+height:48px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:14px;
+font-weight:900;
+color:#00131a;
+background:linear-gradient(135deg,#00ffd5,#00a2ff);
+box-shadow:0 0 25px #00ffd566;
+z-index:5;
+}
+
+@keyframes focusRingPulse{
+0%,100%{
+opacity:.45;
+transform:translate(-50%,-50%) scale(.95);
+}
+50%{
+opacity:1;
+transform:translate(-50%,-50%) scale(1.08);
+}
+}
+
+@keyframes focusRotate{
+0%{
+transform:rotate(0deg);
+}
+100%{
+transform:rotate(360deg);
+}
+}
+
+@media(max-width:600px){
+
+body{
+padding:12px;
+}
+
+.header h1{
+font-size:24px;
+}
+
+.ocean{
+height:560px;
+}
+
+.live-alerts{
+right:12px;
+top:155px;
+width:180px;
+}
+
+.flow-intensity-box{
+left:12px;
+bottom:12px;
+width:170px;
+}
+
+.ocean-status-panel{
+width:100%;
+}
+
+.ai-box{
+flex-direction:column;
+text-align:center;
+}
+
+.zones-grid,
+.smart-money-grid,
+.launch-grid,
+.pulse-grid,
+.reputation-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+.back-btn{
+position:fixed;
+right:14px;
+bottom:14px;
+z-index:999;
+text-decoration:none;
+padding:10px 14px;
+border-radius:14px;
+background:#0b132bdd;
+border:1px solid #24325d;
+color:#00ffd5;
+font-weight:800;
+backdrop-filter:blur(10px);
+transition:.25s;
+font-size:13px;
+box-shadow:0 0 18px #00ffd522;
+}
+
+.back-btn:hover{
+transform:translateY(-2px);
+}
+
+.back-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 0 18px #00ffd544;
+}
+.btn{width:100%;margin-top:18px;border:none;border-radius:18px;padding:15px;font-weight:900;background:linear-gradient(135deg,#00ffd5,#00a2ff);color:#00131a}
+
+</style>
+
+<script>
+window.FLOW_LANG_AUTO = {
+pt:{
+backToMiniApp:"⬅ Voltar ao Mini App",
+sardineAiAlert:"🧠 Alerta da Sardine AI",
+monitoringMarketFlow:"Monitorando o fluxo do mercado...",
+liveSignalScanner:"SCANNER DE SINAIS AO VIVO",
+smartMoneyAccumulating:"🧠 SMART MONEY ACUMULANDO",
+scannerDesc:"A Sardine AI monitora fluxo de liquidez, pressão das baleias e risco de armadilhas em tempo real.",
+oceanIntelligenceSystem:"🌊 Sistema de Inteligência Oceânica",
+oceanIntelligenceDesc:"Camada de inteligência oceânica ao vivo para rastrear movimento de baleias, pressão de FOMO, tempestades de liquidez e zonas de perigo antes que sardinhas virem liquidez de saída."
+}
+};
+
+document.addEventListener("DOMContentLoaded", function(){
+const lang = window.FLOW_LANG_AUTO.pt;
+
+document.querySelectorAll("[data-lang]").forEach(el=>{
+const key = el.getAttribute("data-lang");
+if(lang[key]){
+el.innerText = lang[key];
+}
+});
+});
+</script>
+
+</head>
+
+<a href="index.html" class="back-btn" data-lang="backToMiniApp">⬅ Back to Mini App</a>
+<body>
+
+<div class="ai-notification" id="aiNotification">
+<div class="ai-notification-title" data-lang="sardineAiAlert">🧠 Sardine AI Alert</div>
+<div class="ai-notification-text" id="aiNotificationText" data-lang="monitoringMarketFlow">
+Monitoring market flow...
+</div>
+</div>
+
+<div class="header">
+<div class="scanner-box">
+
+<div class="scanner-top">
+<div class="scanner-dot"></div>
+<span data-lang="liveSignalScanner">LIVE SIGNAL SCANNER</span>
+</div>
+
+<div class="scanner-status" id="scannerStatus" data-lang="smartMoneyAccumulating">
+🧠 SMART MONEY ACCUMULATING
+</div>
+
+<div class="scanner-desc" id="scannerDesc" data-lang="scannerDesc">
+Sardine AI is monitoring liquidity flow, whale pressure and trap risk in real time.
+</div>
+
+</div>
+
+<h1 data-lang="oceanIntelligenceSystem">🌊 Ocean Intelligence System</h1>
+
+<p data-lang="oceanIntelligenceDesc">
+Live Ocean Intelligence layer for tracking whale movement, FOMO pressure, liquidity storms and danger zones before sardines become exit liquidity.
+</p>
+</div>
+
+<div class="ocean">
+
+<div class="deep-glow glow1"></div>
+<div class="deep-glow glow2"></div>
+<div class="deep-glow glow3"></div>
+
+<div class="current-line current1"></div>
+<div class="current-line current2"></div>
+<div class="current-line current3"></div>
+<div class="current-line current4"></div>
+
+<div class="market-storm storm1"></div>
+<div class="market-storm storm2"></div>
+<div class="market-storm storm3"></div>
+
+<div class="risk-heat-layer heat1"></div>
+<div class="risk-heat-layer heat2"></div>
+
+<div class="ai-focus-ring"></div>
+<div class="ai-focus-core">AI</div>
+
+<div class="particles">
+
+<div class="particle p1"></div>
+<div class="particle p2"></div>
+<div class="particle p3"></div>
+<div class="particle p4"></div>
+<div class="particle p5"></div>
+<div class="particle p6"></div>
+
+</div>
+<div class="alert">⚠️ WHALE ACTIVITY DETECTED — FOMO RISK RISING</div>
+<div class="wave one"></div>
+<div class="wave two"></div>
+<div class="whale">🐋</div>
+<div class="sardines">🐟 🐟 🐟 🐟 🐟</div>
+<div class="sardine-dot sd1"></div>
+<div class="sardine-dot sd2"></div>
+<div class="sardine-dot sd3"></div>
+<div class="sardine-dot sd4"></div>
+<div class="sardine-dot sd5"></div>
+<div class="sardine-dot sd6"></div>
+<div class="sardine-dot sd7"></div>
+<div class="sardine-dot sd8"></div>
+<div class="pulse"></div>
+<div class="radar-sweep"></div>
+<div class="whale-node whale-node1"></div>
+<div class="whale-node whale-node2"></div>
+<div class="whale-node whale-node3"></div>
+
+<div class="liquidity-stream stream1"></div>
+<div class="liquidity-stream stream2"></div>
+<div class="liquidity-stream stream3"></div>
+<div class="pulse pulse2"></div>
+<div class="pulse pulse3"></div>
+
+<div class="trap-zone-area trap1"></div>
+<div class="trap-zone-area trap2"></div>
+<div class="flow-intensity-box">
+<div class="flow-intensity-title">🌊 Flow Intensity</div>
+<div class="flow-intensity-bar">
+<div class="flow-intensity-fill" id="flowIntensityFill"></div>
+</div>
+<div class="flow-intensity-text" id="flowIntensityText">
+Reading ocean pressure...
+</div>
+</div>
+
+<div class="live-alerts" id="liveAlerts">
+
+<div class="live-item danger">
+⚠️ Sardines entering FOMO area
+</div>
+
+<div class="live-item flow">
+🌊 Liquidity moving to altcoins
+</div>
+
+<div class="live-item smart">
+🧠 Smart accumulation detected
+</div>
+
+<div class="live-item whale">
+🐋 Whale detected near resistance zone
+</div>
+
+</div>
+</div>
+
+<div class="ocean-status-panel">
+
+<div class="ocean-status-title">
+🧠 Ocean Status
+</div>
+
+<div class="ocean-status-row">
+<span>Market Flow</span>
+<b id="statusMarketFlow">Scanning</b>
+</div>
+
+<div class="ocean-status-row">
+<span>Whale Pressure</span>
+<b id="statusWhalePressure">--</b>
+</div>
+
+<div class="ocean-status-row">
+<span>Trap Risk</span>
+<b id="statusTrapRisk">--</b>
+</div>
+
+<div class="ocean-status-row">
+<span>Sardine Mode</span>
+<b id="statusSardineMode">Protect</b>
+</div>
+
+</div>
+
+<div class="ai-feed-box">
+
+<div class="ai-feed-header">
+📡 REAL-TIME AI FEED
+</div>
+
+<div id="aiFeedList" class="ai-feed-list">
+
+<div class="ai-feed-item">
+<span>LIVE</span>
+<b>System initialized. Sardine AI is scanning market flow...</b>
+</div>
+
+</div>
+
+</div>
+<div class="alert-config-box">
+
+<div class="alert-config-title">
+🔔 ASSET ALERT CONFIG
+</div>
+
+<p class="alert-config-subtitle">
+Choose which real-time alerts Sardine AI should monitor for your selected assets.
+</p>
+
+<div class="alert-options">
+
+<label class="alert-option">
+<input type="checkbox" checked>
+<span>🐋 Whale Movement Alerts</span>
+</label>
+
+<label class="alert-option">
+<input type="checkbox" checked>
+<span>⚠ FOMO Risk Alerts</span>
+</label>
+
+<label class="alert-option">
+<input type="checkbox" checked>
+<span>🌊 Liquidity Flow Alerts</span>
+</label>
+
+<label class="alert-option">
+<input type="checkbox" checked>
+<span>📰 Market News Alerts</span>
+</label>
+
+<label class="alert-option">
+<input type="checkbox">
+<span>🚨 Trap Zone Detection</span>
+</label>
+
+<label class="alert-option">
+<input type="checkbox">
+<span>🧠 Smart Money Signals</span>
+</label>
+
+</div>
+
+<button class="save-alert-btn" onclick="saveAlertConfig()">
+SAVE ALERT PREFERENCES
+</button>
+
+<div id="alertSaveStatus" class="alert-save-status">
+No changes saved yet.
+</div>
+
+</div>
+<div class="leaderboard-box">
+
+<div class="leaderboard-header">
+🏆 TOP SARDINES LEADERBOARD
+</div>
+
+<p class="leaderboard-subtitle">
+Ranking based on Flow Score, Smart Reads and Whale Hunter reputation.
+</p>
+
+<div class="leaderboard-list">
+
+<div class="leaderboard-item first">
+<span>#1</span>
+<b>OceanHunter</b>
+<small>Flow Score 96 • Diamond</small>
+</div>
+
+<div class="leaderboard-item second">
+<span>#2</span>
+<b>SmartSardine</b>
+<small>Flow Score 89 • Diamond</small>
+</div>
+
+<div class="leaderboard-item third">
+<span>#3</span>
+<b>WhaleWatcher</b>
+<small>Flow Score 82 • Gold</small>
+</div>
+
+<div class="leaderboard-item">
+<span>#4</span>
+<b>You</b>
+<small id="yourLeaderboardScore">Flow Score 72 • Bronze</small>
+</div>
+
+</div>
+
+</div>
+<div class="reputation-box">
+
+<div class="reputation-header">
+👑 SARDINE REPUTATION SYSTEM
+</div>
+
+<div class="reputation-profile">
+
+<div class="reputation-rank">
+🐟
+</div>
+
+<div>
+<div class="reputation-title">Smart Sardine</div>
+<div class="reputation-subtitle">Build reputation by reading the market, avoiding traps and protecting capital.</div>
+</div>
+
+</div>
+
+<div class="reputation-grid">
+
+<div class="rep-card">
+<span>Flow Score</span>
+<b id="flowScore">72</b>
+</div>
+
+<div class="rep-card">
+<span>Survival Rate</span>
+<b id="survivalRate">84%</b>
+</div>
+
+<div class="rep-card">
+<span>Whale Hunter Rank</span>
+<b id="whaleHunterRank">Bronze</b>
+</div>
+
+<div class="rep-card">
+<span>Smart Reads</span>
+<b id="smartReads">12</b>
+</div>
+
+</div>
+
+<div class="rep-progress">
+<div class="rep-progress-fill" id="repProgressFill"></div>
+</div>
+
+<div class="rep-note" id="repNote">
+Analyze assets with Sardine AI to improve your reputation.
+</div>
+
+</div>
+
+<div class="energy-box">
+
+<div class="energy-header">
+⚡ FLOW ENERGY SYSTEM
+</div>
+
+<div class="energy-card">
+
+<div class="energy-top">
+
+<div>
+<div class="energy-title">
+Sardine Energy
+</div>
+
+<div class="energy-subtitle">
+Energy is consumed when using Sardine AI analysis.
+</div>
+</div>
+
+<div class="energy-count" id="energyCount">
+100/100
+</div>
+
+</div>
+
+<div class="energy-bar">
+<div class="energy-fill" id="energyFill"></div>
+</div>
+
+<div class="energy-status" id="energyStatus">
+Energy Full
+</div>
+
+</div>
+
+</div>
+<div class="watchlist-box">
+
+<div class="watch-title">📡 Sardine AI Watchlist</div>
+<p class="watch-subtitle">Choose a top crypto or enter a custom token to monitor market risk, FOMO, news pressure and whale movement.</p>
+
+<input id="assetSearch" class="watch-input" placeholder="Search top crypto: BTC, ETH, SOL, SNAO..." oninput="filterAssets()">
+
+<select id="assetSelect" class="watch-input">
+
+<option value="BTC">Bitcoin — BTC</option>
+<option value="ETH">Ethereum — ETH</option>
+<option value="BNB">BNB — BNB</option>
+<option value="SOL">Solana — SOL</option>
+<option value="XRP">XRP — XRP</option>
+<option value="ADA">Cardano — ADA</option>
+<option value="DOGE">Dogecoin — DOGE</option>
+<option value="TRX">TRON — TRX</option>
+<option value="TON">Toncoin — TON</option>
+<option value="AVAX">Avalanche — AVAX</option>
+<option value="SHIB">Shiba Inu — SHIB</option>
+<option value="DOT">Polkadot — DOT</option>
+<option value="LINK">Chainlink — LINK</option>
+<option value="MATIC">Polygon — MATIC</option>
+<option value="PEPE">Pepe — PEPE</option>
+<option value="UNI">Uniswap — UNI</option>
+<option value="APT">Aptos — APT</option>
+<option value="ARB">Arbitrum — ARB</option>
+<option value="OP">Optimism — OP</option>
+<option value="NEAR">Near — NEAR</option>
+<option value="SUI">Sui — SUI</option>
+<option value="INJ">Injective — INJ</option>
+<option value="ATOM">Cosmos — ATOM</option>
+<option value="SEI">Sei — SEI</option>
+<option value="TIA">Celestia — TIA</option>
+<option value="WIF">dogwifhat — WIF</option>
+<option value="FLOKI">Floki — FLOKI</option>
+<option value="BONK">Bonk — BONK</option>
+<option value="JUP">Jupiter — JUP</option>
+<option value="PYTH">Pyth Network — PYTH</option>
+<option value="AAVE">Aave — AAVE</option>
+<option value="MKR">Maker — MKR</option>
+<option value="RENDER">Render — RENDER</option>
+<option value="RNDR">Render Old — RNDR</option>
+<option value="GALA">Gala — GALA</option>
+<option value="FET">Fetch.ai — FET</option>
+<option value="AGIX">SingularityNET — AGIX</option>
+<option value="OCEAN">Ocean Protocol — OCEAN</option>
+<option value="TAO">Bittensor — TAO</option>
+<option value="RUNE">THORChain — RUNE</option>
+<option value="XLM">Stellar — XLM</option>
+<option value="HBAR">Hedera — HBAR</option>
+<option value="KAS">Kaspa — KAS</option>
+<option value="FIL">Filecoin — FIL</option>
+<option value="ICP">Internet Computer — ICP</option>
+<option value="LDO">Lido DAO — LDO</option>
+<option value="ETC">Ethereum Classic — ETC</option>
+<option value="AR">Arweave — AR</option>
+<option value="EGLD">MultiversX — EGLD</option>
+<option value="ALGO">Algorand — ALGO</option>
+<option value="SAND">The Sandbox — SAND</option>
+<option value="MANA">Decentraland — MANA</option>
+<option value="AXS">Axie Infinity — AXS</option>
+<option value="IMX">Immutable — IMX</option>
+<option value="STX">Stacks — STX</option>
+<option value="FLOW">Flow — FLOW</option>
+<option value="THETA">Theta — THETA</option>
+<option value="CHZ">Chiliz — CHZ</option>
+<option value="APE">ApeCoin — APE</option>
+<option value="DYDX">dYdX — DYDX</option>
+<option value="CRV">Curve — CRV</option>
+<option value="COMP">Compound — COMP</option>
+<option value="ENS">Ethereum Name Service — ENS</option>
+<option value="BLUR">Blur — BLUR</option>
+<option value="GMX">GMX — GMX</option>
+<option value="PENDLE">Pendle — PENDLE</option>
+<option value="1INCH">1inch — 1INCH</option>
+<option value="CAKE">PancakeSwap — CAKE</option>
+<option value="MINA">Mina — MINA</option>
+<option value="CFX">Conflux — CFX</option>
+<option value="ROSE">Oasis — ROSE</option>
+<option value="WLD">Worldcoin — WLD</option>
+<option value="JASMY">JasmyCoin — JASMY</option>
+<option value="AKT">Akash — AKT</option>
+<option value="ZEC">Zcash — ZEC</option>
+<option value="QTUM">Qtum — QTUM</option>
+<option value="SNX">Synthetix — SNX</option>
+<option value="BAT">Basic Attention Token — BAT</option>
+<option value="YFI">yearn.finance — YFI</option>
+<option value="ANKR">Ankr — ANKR</option>
+<option value="HOT">Holo — HOT</option>
+<option value="IO">io.net — IO</option>
+<option value="NOT">Notcoin — NOT</option>
+<option value="TURBO">Turbo — TURBO</option>
+<option value="MEME">Memecoin — MEME</option>
+<option value="BRETT">Brett — BRETT</option>
+<option value="POPCAT">Popcat — POPCAT</option>
+<option value="MEW">cat in a dogs world — MEW</option>
+<option value="MOG">Mog Coin — MOG</option>
+<option value="SNAO">$SNAO — Sardine Ocean AI</option>
+
+</select>
+
+<input id="customAsset" class="watch-input" placeholder="Or type custom token: e.g. WIF, SUI, SNAO">
+
+<button class="watch-btn" onclick="startAIWatch()">START AI WATCH</button>
+
+<div id="watchResult" class="watch-result">
+Select an asset to activate Sardine AI market protection.</div>
+
+</div>
+<div class="ai-guardian">
+
+<div class="ai-title">
+🧠 Sardine AI Guardian
+</div>
+
+<div class="ai-box">
+
+<div class="ai-score">
+<div class="score-number" id="guardianRiskScore">72</div>
+<div class="score-label">Risk Score</div>
+</div>
+
+<div class="ai-text">
+<h3 id="guardianTitle">🧠 Market Protection Active</h3>
+<p id="guardianText">
+Sardine AI is watching market flow, whale pressure and retail FOMO to help users avoid emotional entries.
+</p>
+</div>
+
+</div>
+
+<div class="ai-grid">
+
+<div class="ai-mini">
+<span>Whale Distribution</span>
+<b id="guardianWhale">High</b>
+</div>
+
+<div class="ai-mini">
+<span>FOMO Pressure</span>
+<b id="guardianFomo">Extreme</b>
+</div>
+
+<div class="ai-mini">
+<span>Smart Money</span>
+<b id="guardianSmart">Accumulating</b>
+</div>
+
+<div class="ai-mini">
+<span>Sardine Action</span>
+<b id="guardianAction">Protect Capital</b>
+</div>
+
+</div>
+
+</div>
+<div class="ocean-events">
+
+<div class="events-header">
+🌊 LIVE OCEAN EVENTS
+</div>
+
+<div class="event-list">
+
+<div class="event-card danger-event">
+<div class="event-title">🐋 Whale Attack</div>
+<div class="event-desc">
+Large wallets moving near resistance zone
+</div>
+</div>
+
+<div class="event-card warning-event">
+<div class="event-title">⚠ Liquidity Storm</div>
+<div class="event-desc">
+High volatility detected across meme sectors
+</div>
+</div>
+
+<div class="event-card smart-event">
+<div class="event-title">🧠 Smart Accumulation</div>
+<div class="event-desc">
+Possible institutional accumulation detected
+</div>
+</div>
+
+</div>
+
+</div>
+<div class="news-system">
+
+<div class="news-header">
+📰 LIVE MARKET NEWS
+</div>
+
+<div class="news-feed">
+
+<div class="news-card negative-news">
+<div class="news-impact">HIGH IMPACT</div>
+<div class="news-title">
+🇺🇸 Federal Reserve uncertainty increases market volatility
+</div>
+<div class="news-desc">
+Bitcoin and altcoins reacting to macroeconomic pressure and interest rate fears.
+</div>
+</div>
+
+<div class="news-card positive-news">
+<div class="news-impact">BULLISH</div>
+<div class="news-title">
+🐋 Ethereum whale wallets increase accumulation
+</div>
+<div class="news-desc">
+Large wallets continue accumulation while retail sentiment rises.
+</div>
+</div>
+
+<div class="news-card warning-news">
+<div class="news-impact">CAUTION</div>
+<div class="news-title">
+⚠ Meme coin sector enters high FOMO state
+</div>
+<div class="news-desc">
+Sardine AI detected excessive emotional buying behavior across meme sectors.
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="ocean-zones">
+
+<div class="zones-header">
+🌊 MARKET OCEAN ZONES
+</div>
+
+<div class="zones-grid">
+
+<div class="zone-card hot-zone">
+<div class="zone-title">🔥 HOT ZONE</div>
+<div class="zone-assets">SOL • PEPE • WIF</div>
+<div class="zone-desc">High attention and fast retail movement detected.</div>
+</div>
+
+<div class="zone-card trap-zone">
+<div class="zone-title">🚨 TRAP ZONE</div>
+<div class="zone-assets">DOGE • MEME • BONK</div>
+<div class="zone-desc">FOMO pressure rising with unstable liquidity.</div>
+</div>
+
+<div class="zone-card whale-zone">
+<div class="zone-title">🐋 WHALE ZONE</div>
+<div class="zone-assets">BTC • ETH • BNB</div>
+<div class="zone-desc">Large wallet activity and liquidity shifts detected.</div>
+</div>
+
+<div class="zone-card smart-zone">
+<div class="zone-title">🧠 SMART ACCUMULATION</div>
+<div class="zone-assets">LINK • INJ • RENDER</div>
+<div class="zone-desc">Accumulation behavior and quieter strength detected.</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="smart-money-box">
+
+<div class="smart-money-header">
+🐋 SMART MONEY TRACKER
+</div>
+
+<div class="smart-money-grid">
+
+<div class="smart-money-card accumulation">
+<div class="smart-money-title">Accumulation</div>
+<div class="smart-money-value" id="accumulationValue">68%</div>
+<div class="smart-money-desc">Smart wallets quietly increasing exposure.</div>
+</div>
+
+<div class="smart-money-card distribution">
+<div class="smart-money-title">Distribution</div>
+<div class="smart-money-value" id="distributionValue">41%</div>
+<div class="smart-money-desc">Whale wallets reducing exposure near resistance.</div>
+</div>
+
+<div class="smart-money-card buy-pressure">
+<div class="smart-money-title">Buy Pressure</div>
+<div class="smart-money-value" id="buyPressureValue">High</div>
+<div class="smart-money-desc">Demand increasing across watched assets.</div>
+</div>
+
+<div class="smart-money-card sell-pressure">
+<div class="smart-money-title">Sell Pressure</div>
+<div class="smart-money-value" id="sellPressureValue">Moderate</div>
+<div class="smart-money-desc">Exit liquidity risk being monitored.</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="sentiment-box">
+
+<div class="sentiment-header">
+🧠 AI MARKET SENTIMENT
+</div>
+
+<div class="sentiment-card" id="sentimentCard">
+
+<div class="sentiment-top">
+
+<div class="sentiment-emoji" id="sentimentEmoji">
+😨
+</div>
+
+<div>
+<div class="sentiment-title" id="sentimentTitle">
+Fear Dominating
+</div>
+
+<div class="sentiment-desc" id="sentimentDesc">
+Retail traders showing uncertainty and emotional hesitation.
+</div>
+</div>
+
+</div>
+
+<div class="sentiment-bar">
+<div class="sentiment-fill" id="sentimentFill"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="shield-box">
+
+<div class="shield-header">
+🛡️ ANTI-EXIT LIQUIDITY SHIELD
+</div>
+
+<div class="shield-card" id="shieldCard">
+
+<div class="shield-level" id="shieldLevel">
+CAUTION
+</div>
+
+<div class="shield-title" id="shieldTitle">
+Possible Exit Liquidity Risk
+</div>
+
+<div class="shield-desc" id="shieldDesc">
+Sardine AI detected rising FOMO pressure and unstable liquidity. Avoid emotional entries.
+</div>
+
+<div class="shield-bar">
+<div class="shield-fill" id="shieldFill"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="missions-box">
+
+<div class="missions-header">
+🎯 SARDINE MISSIONS
+</div>
+
+<div class="missions-subtitle">
+Complete missions to increase reputation, intelligence and survival rate.
+</div>
+
+<div class="mission-list">
+
+<div class="mission-card" id="missionAnalyze">
+<div class="mission-left">
+<div class="mission-icon">🧠</div>
+<div>
+<div class="mission-title">Analyze 1 Asset</div>
+<div class="mission-desc">Use Sardine AI Watchlist</div>
+</div>
+</div>
+<div class="mission-xp">+15 XP</div>
+</div>
+
+<div class="mission-card" id="missionAlert">
+<div class="mission-left">
+<div class="mission-icon">🛡️</div>
+<div>
+<div class="mission-title">Avoid Trap Zone</div>
+<div class="mission-desc">Use Anti-Exit Liquidity Shield</div>
+</div>
+</div>
+<div class="mission-xp">+25 XP</div>
+</div>
+
+<div class="mission-card">
+<div class="mission-left">
+<div class="mission-icon">🐋</div>
+<div>
+<div class="mission-title">Track Whale Activity</div>
+<div class="mission-desc">Observe Smart Money Tracker</div>
+</div>
+</div>
+<div class="mission-xp">+20 XP</div>
+</div>
+
+<div class="mission-card">
+<div class="mission-left">
+<div class="mission-icon">🌊</div>
+<div>
+<div class="mission-title">Study Ocean Flow</div>
+<div class="mission-desc">Read market sentiment changes</div>
+</div>
+</div>
+<div class="mission-xp">+18 XP</div>
+</div>
+
+</div>
+
+<div class="xp-box">
+
+<div class="xp-label">
+Sardine XP Progress
+</div>
+
+<div class="xp-bar">
+<div class="xp-fill" id="xpFill"></div>
+</div>
+
+<div class="xp-text" id="xpText">
+Level 3 • 78 / 100 XP
+</div>
+
+</div>
+
+</div>
+
+<div class="launch-box">
+
+<div class="launch-header">
+🚀 LAUNCH READINESS PANEL
+</div>
+
+<div class="launch-score">
+<div class="launch-number" id="launchScore">91%</div>
+<div class="launch-label">MVP Readiness</div>
+</div>
+
+<div class="launch-grid">
+
+<div class="launch-item ready">
+<span>Mini App Core</span>
+<b>Online</b>
+</div>
+
+<div class="launch-item beta">
+<span>Flow Map</span>
+<b>Beta Ready</b>
+</div>
+
+<div class="launch-item ready">
+<span>Sardine AI Visual</span>
+<b>Live</b>
+</div>
+
+<div class="launch-item warning">
+<span>Telegram Login</span>
+<b>Testing</b>
+</div>
+
+<div class="launch-item warning">
+<span>Referral System</span>
+<b>Pending</b>
+</div>
+
+<div class="launch-item warning">
+<span>Auto Payment</span>
+<b>Pending</b>
+</div>
+
+</div>
+
+</div>
+
+<div class="market-pulse">
+
+<div class="pulse-header">
+🧠 LIVE MARKET PULSE
+</div>
+
+<div class="pulse-grid">
+
+<div class="pulse-card bullish">
+<div class="pulse-label">Market Mood</div>
+<div class="pulse-value">Bullish</div>
+</div>
+
+<div class="pulse-card danger">
+<div class="pulse-label">Sardine Risk</div>
+<div class="pulse-value">Extreme</div>
+</div>
+
+<div class="pulse-card smart">
+<div class="pulse-label">Smart Money</div>
+<div class="pulse-value">Accumulating</div>
+</div>
+
+<div class="pulse-card whale-pulse">
+<div class="pulse-label">Whale Aggression</div>
+<div class="pulse-value">76%</div>
+</div>
+
+</div>
+
+</div>
+<div class="grid">
+<div class="card"><h3>FOMO Meter</h3><div class="value danger">82%</div></div>
+<div class="card"><h3>Whale Pressure</h3><div class="value warn">High</div></div>
+<div class="card"><h3>Liquidity Flow</h3><div class="value danger">Outflow</div></div>
+<div class="card"><h3>Trap Zone</h3><div class="value danger">Active</div></div>
+<div class="card"><h3>Smart Accumulation</h3><div class="value good">Watching</div></div>
+<div class="card"><h3>Sardine Signal</h3><div class="value warn">Caution</div></div>
+<div class="news-card positive-news"> <div class="news-impact" id="assetNewsImpact">ASSET WATCH</div> <div class="news-title" id="assetNewsTitle"> 🧠 Select an asset to start AI monitoring </div> <div class="news-desc" id="assetNewsDesc"> Sardine AI will generate market protection alerts based on the selected coin or custom token. </div> </div>
+</div>
+
+<button class="btn" onclick="startAIWatch()">🧠 ANALYZE MARKET FLOW</button>
+
+<script>
+
+const FLOW_LANG = {
+en:{
+backToMiniApp:"⬅ Back to Mini App",
+sardineAiAlert:"🧠 Sardine AI Alert",
+monitoringMarketFlow:"Monitoring market flow...",
+liveSignalScanner:"LIVE SIGNAL SCANNER",
+smartMoneyAccumulating:"🧠 SMART MONEY ACCUMULATING",
+scannerDesc:"Sardine AI is monitoring liquidity flow, whale pressure and trap risk in real time.",
+oceanIntelligenceSystem:"🌊 Ocean Intelligence System",
+oceanIntelligenceDesc:"Live Ocean Intelligence layer for tracking whale movement, FOMO pressure, liquidity storms and danger zones before sardines become exit liquidity."
+},
+
+pt:{
+backToMiniApp:"⬅ Voltar ao Mini App",
+sardineAiAlert:"🧠 Alerta da Sardine AI",
+monitoringMarketFlow:"Monitorando o fluxo do mercado...",
+liveSignalScanner:"SCANNER DE SINAIS AO VIVO",
+smartMoneyAccumulating:"🧠 SMART MONEY ACUMULANDO",
+scannerDesc:"A Sardine AI monitora fluxo de liquidez, pressão das baleias e risco de armadilhas em tempo real.",
+oceanIntelligenceSystem:"🌊 Sistema de Inteligência Oceânica",
+oceanIntelligenceDesc:"Camada de inteligência oceânica ao vivo para rastrear movimento de baleias, pressão de FOMO, tempestades de liquidez e zonas de perigo antes que sardinhas virem liquidez de saída."
+},
+
+es:{
+backToMiniApp:"⬅ Volver al Mini App",
+sardineAiAlert:"🧠 Alerta de Sardine AI",
+monitoringMarketFlow:"Monitoreando el flujo del mercado...",
+liveSignalScanner:"ESCÁNER DE SEÑALES EN VIVO",
+smartMoneyAccumulating:"🧠 SMART MONEY ACUMULANDO",
+scannerDesc:"Sardine AI monitorea el flujo de liquidez, la presión de ballenas y el riesgo de trampas en tiempo real.",
+oceanIntelligenceSystem:"🌊 Sistema de Inteligencia Oceánica",
+oceanIntelligenceDesc:"Capa de inteligencia oceánica en vivo para rastrear movimiento de ballenas, presión FOMO, tormentas de liquidez y zonas de peligro antes de que las sardinas se conviertan en liquidez de salida."
+},
+
+ja:{
+backToMiniApp:"⬅ ミニアプリに戻る",
+sardineAiAlert:"🧠 Sardine AIアラート",
+monitoringMarketFlow:"市場フローを監視中...",
+liveSignalScanner:"ライブシグナルスキャナー",
+smartMoneyAccumulating:"🧠 スマートマネー蓄積中",
+scannerDesc:"Sardine AIは流動性フロー、クジラ圧力、トラップリスクをリアルタイムで監視しています。",
+oceanIntelligenceSystem:"🌊 オーシャンインテリジェンスシステム",
+oceanIntelligenceDesc:"クジラの動き、FOMO圧力、流動性の嵐、危険ゾーンを追跡し、サーディンが出口流動性になる前に察知するライブ分析レイヤーです。"
+},
+
+ko:{
+backToMiniApp:"⬅ 미니 앱으로 돌아가기",
+sardineAiAlert:"🧠 Sardine AI 알림",
+monitoringMarketFlow:"시장 흐름 모니터링 중...",
+liveSignalScanner:"실시간 신호 스캐너",
+smartMoneyAccumulating:"🧠 스마트머니 축적 중",
+scannerDesc:"Sardine AI는 유동성 흐름, 고래 압력, 트랩 위험을 실시간으로 모니터링합니다.",
+oceanIntelligenceSystem:"🌊 오션 인텔리전스 시스템",
+oceanIntelligenceDesc:"고래 움직임, FOMO 압력, 유동성 폭풍과 위험 구역을 실시간으로 추적하여 사용자가 출구 유동성이 되기 전에 감지하는 분석 레이어입니다."
+},
+
+zh:{
+backToMiniApp:"⬅ 返回迷你应用",
+sardineAiAlert:"🧠 Sardine AI 警报",
+monitoringMarketFlow:"正在监控市场流向...",
+liveSignalScanner:"实时信号扫描器",
+smartMoneyAccumulating:"🧠 聪明资金正在积累",
+scannerDesc:"Sardine AI 正在实时监控流动性流向、鲸鱼压力和陷阱风险。",
+oceanIntelligenceSystem:"🌊 海洋智能系统",
+oceanIntelligenceDesc:"实时海洋智能层，用于追踪鲸鱼动向、FOMO压力、流动性风暴和危险区域，避免沙丁鱼成为退出流动性。"
+}
+};
+
+let currentLanguage = localStorage.getItem("language") || "en";
+
+function applyFlowLanguage(){
+const lang = FLOW_LANG[currentLanguage] || FLOW_LANG.en;
+
+document.querySelectorAll("[data-lang]").forEach(el=>{
+const key = el.getAttribute("data-lang");
+
+if(lang[key]){
+el.innerText = lang[key];
+}
+});
+}
+
+window.addEventListener("load", function(){
+applyFlowLanguage();
+});
+
+function startAIWatch(){
+
+let currentEnergy=
+parseInt(localStorage.getItem("snaoEnergy") || "100");
+
+if(currentEnergy<10){
+
+document.getElementById("watchResult").innerHTML=
+"⚠️ Not enough Flow Energy.<br><br>"+
+"Wait for regeneration before using Sardine AI again.";
+
+return;
+
+}
+
+currentEnergy-=10;
+
+localStorage.setItem("snaoEnergy",currentEnergy);
+
+updateEnergyUI();
+
+let selected=document.getElementById("assetSelect").value;
+
+let custom=document.getElementById("customAsset").value.trim().toUpperCase();
+
+let asset=custom || selected;
+
+let risks=[
+"FOMO pressure rising while volume expands aggressively.",
+"Whale pressure detected near resistance area.",
+"Liquidity flow is unstable. Sardine AI recommends caution.",
+"Market news pressure increasing. Watch for sudden volatility.",
+"Smart money activity detected, but retail entry is heating up."
+];
+
+let randomRisk=risks[Math.floor(Math.random()*risks.length)];
+
+let riskScore=Math.floor(Math.random()*31)+60;
+let fomoScore=Math.floor(Math.random()*41)+50;
+let whaleScore=Math.floor(Math.random()*46)+45;
+
+let liquidityStates=[
+"Stable",
+"Unstable",
+"Outflow",
+"Inflow",
+"Rotating"
+];
+
+let liquidityState=liquidityStates[Math.floor(Math.random()*liquidityStates.length)];
+
+let action="CAUTION";
+
+document.getElementById("guardianRiskScore").innerText=riskScore;
+
+document.getElementById("guardianWhale").innerText=
+whaleScore>=75 ? "Extreme" :
+whaleScore>=60 ? "High" : "Moderate";
+
+document.getElementById("guardianFomo").innerText=
+fomoScore>=80 ? "Extreme" :
+fomoScore>=65 ? "High" : "Moderate";
+
+document.getElementById("guardianSmart").innerText=
+riskScore<=70 ? "Accumulating" :
+riskScore<=85 ? "Watching" : "Defensive";
+
+document.getElementById("guardianAction").innerText=
+action==="DANGER" ? "Avoid Emotional Entry" :
+action==="CAUTION" ? "Protect Capital" :
+"Observe Market";
+
+document.getElementById("guardianTitle").innerText=
+action==="DANGER"
+? "🚨 Extreme Trap Probability"
+: action==="CAUTION"
+? "⚠ Elevated Market Risk"
+: "🧠 Market Conditions Stable";
+
+document.getElementById("guardianText").innerText=
+"Sardine AI analyzed "+asset+
+" and detected "+action+
+" market conditions based on whale pressure, FOMO behavior, liquidity movement and smart money activity.";
+
+if(riskScore>=85){
+action="DANGER";
+}else if(riskScore>=70){
+action="CAUTION";
+}else{
+action="WATCH";
+}
+
+let newsImpact=document.getElementById("assetNewsImpact");
+let newsTitle=document.getElementById("assetNewsTitle");
+let newsDesc=document.getElementById("assetNewsDesc");
+
+if(newsImpact && newsTitle && newsDesc){
+newsImpact.innerText="WATCHING "+asset;
+newsTitle.innerText="🧠 Sardine AI is now monitoring "+asset+" in real time";
+newsDesc.innerText="The system is tracking volatility, whale pressure, FOMO behavior, liquidity flow and news pressure related to "+asset+".";
+}
+document.getElementById("watchResult").innerHTML=
+"<b>🧠 Sardine AI watching: "+asset+"</b><br><br>"+
+"⚠️ "+randomRisk+"<br><br>"+
+"Risk Score: <b>"+riskScore+"/100</b><br>"+
+"FOMO Pressure: <b>"+fomoScore+"%</b><br>"+
+"Whale Pressure: <b>"+whaleScore+"%</b><br>"+
+"Liquidity Flow: <b>"+liquidityState+"</b><br><br>"+
+"Risk Mode: <b>"+action+"</b><br>"+
+"Signal Type: <b>Market Protection Alert</b><br>"+
+"Note: This is not financial advice. This system is designed to help sardines avoid becoming exit liquidity.";
+let shieldLevel="CAUTION";
+let shieldTitle="Possible Exit Liquidity Risk";
+let shieldDesc="Sardine AI detected rising FOMO pressure and unstable liquidity. Avoid emotional entries.";
+let shieldWidth="65%";
+let shieldColor="#ffcc66";
+
+if(riskScore>=85){
+shieldLevel="DANGER";
+shieldTitle="High Exit Liquidity Risk";
+shieldDesc=asset+" shows extreme FOMO behavior, strong whale pressure and unstable liquidity. Sardine AI recommends avoiding emotional entries.";
+shieldWidth="92%";
+shieldColor="#ff4f6d";
+}else if(riskScore>=70){
+shieldLevel="CAUTION";
+shieldTitle="Possible Exit Liquidity Risk";
+shieldDesc=asset+" shows elevated risk conditions. Wait for confirmation and avoid chasing pumps.";
+shieldWidth="68%";
+shieldColor="#ffcc66";
+}else{
+shieldLevel="WATCH";
+shieldTitle="Lower Exit Liquidity Risk";
+shieldDesc=asset+" conditions appear more stable, but Sardine AI still recommends patience and risk control.";
+shieldWidth="38%";
+shieldColor="#00ffd5";
+}
+
+document.getElementById("shieldLevel").innerText=shieldLevel;
+document.getElementById("shieldTitle").innerText=shieldTitle;
+document.getElementById("shieldDesc").innerText=shieldDesc;
+document.getElementById("shieldFill").style.width=shieldWidth;
+document.getElementById("shieldFill").style.background=shieldColor;
+document.getElementById("shieldCard").style.borderColor=shieldColor+"55";
+document.getElementById("shieldCard").style.boxShadow="0 0 25px "+shieldColor+"22";
+let newFlowScore=Math.min(100, riskScore - 5 + Math.floor(Math.random()*15));
+let newSurvival=Math.max(40, 100 - riskScore + Math.floor(Math.random()*20));
+let newReads=parseInt(localStorage.getItem("snaoSmartReads") || "12") + 1;
+
+localStorage.setItem("snaoSmartReads",newReads);
+
+document.getElementById("flowScore").innerText=newFlowScore;
+document.getElementById("survivalRate").innerText=newSurvival+"%";
+document.getElementById("smartReads").innerText=newReads;
+document.getElementById("repProgressFill").style.width=newFlowScore+"%";
+
+let hunterRank="Bronze";
+
+if(newFlowScore>=85){
+hunterRank="Diamond";
+}else if(newFlowScore>=70){
+hunterRank="Gold";
+}else if(newFlowScore>=55){
+hunterRank="Silver";
+}
+
+document.getElementById("whaleHunterRank").innerText=hunterRank;
+
+document.getElementById("yourLeaderboardScore").innerText=
+"Flow Score "+newFlowScore+" • "+hunterRank;
+
+document.getElementById("repNote").innerText=
+"Sardine AI updated your reputation after analyzing "+asset+
+". Keep learning the flow and avoid becoming exit liquidity.";
+
+let xp=Math.min(100,newFlowScore+Math.floor(Math.random()*12));
+
+localStorage.setItem("snaoFlowXP",xp);
+
+document.getElementById("xpFill").style.width=xp+"%";
+
+let level=1;
+
+if(xp>=80){
+level=5;
+}else if(xp>=65){
+level=4;
+}else if(xp>=45){
+level=3;
+}else if(xp>=25){
+level=2;
+}
+
+document.getElementById("xpText").innerText=
+"Level "+level+" • "+xp+" / 100 XP";
+
+localStorage.setItem("snaoFlowLevel",level);
+
+document.getElementById("missionAnalyze").classList.add("done");
+localStorage.setItem("missionAnalyzeDone","true");
+
+}
+
+const liveSignals=[
+
+{
+status:"⚠ HIGH FOMO DETECTED",
+desc:"Retail pressure increasing aggressively."
+},
+
+{
+status:"🐋 WHALE MOVEMENT DETECTED",
+desc:"Large wallets repositioning near resistance."
+},
+
+{
+status:"🌊 LIQUIDITY FLOW SHIFT",
+desc:"Liquidity rotating between sectors."
+},
+
+{
+status:"🧠 SMART MONEY ACCUMULATING",
+desc:"Possible accumulation pattern detected."
+},
+
+{
+status:"🚨 TRAP ZONE ACTIVE",
+desc:"Volatility and emotional buying increasing."
+}
+
+];
+
+const marketSentiments=[
+
+{
+emoji:"😨",
+title:"Fear Dominating",
+desc:"Retail traders showing uncertainty and emotional hesitation.",
+width:"32%",
+color:"#ffcc66"
+},
+
+{
+emoji:"😱",
+title:"Market Panic",
+desc:"Strong fear and aggressive sell pressure detected.",
+width:"88%",
+color:"#ff4f6d"
+},
+
+{
+emoji:"🚀",
+title:"Euphoria Rising",
+desc:"Extreme optimism and emotional buying detected.",
+width:"95%",
+color:"#8b5cff"
+},
+
+{
+emoji:"🧠",
+title:"Smart Neutral",
+desc:"Smart money remains calm while retail fights volatility.",
+width:"48%",
+color:"#00ffd5"
+},
+
+{
+emoji:"🐋",
+title:"Whale Confidence",
+desc:"Large wallets increasing exposure carefully.",
+width:"70%",
+color:"#00a2ff"
+}
+
+];
+
+function updateMarketSentiment(){
+
+let random=
+marketSentiments[
+Math.floor(Math.random()*marketSentiments.length)
+];
+
+document.getElementById("sentimentEmoji").innerText=
+random.emoji;
+
+document.getElementById("sentimentTitle").innerText=
+random.title;
+
+document.getElementById("sentimentDesc").innerText=
+random.desc;
+
+document.getElementById("sentimentFill").style.width=
+random.width;
+
+document.getElementById("sentimentFill").style.background=
+random.color;
+
+document.getElementById("sentimentCard").style.borderColor=
+random.color+"55";
+
+document.getElementById("sentimentCard").style.boxShadow=
+"0 0 25px "+random.color+"22";
+
+}
+
+function updateSmartMoneyTracker(){
+
+let accumulation=Math.floor(Math.random()*41)+50;
+let distribution=Math.floor(Math.random()*51)+25;
+
+let buyStates=["Low","Moderate","High","Extreme"];
+let sellStates=["Low","Moderate","High","Extreme"];
+
+let buy=buyStates[Math.floor(Math.random()*buyStates.length)];
+let sell=sellStates[Math.floor(Math.random()*sellStates.length)];
+
+document.getElementById("accumulationValue").innerText=accumulation+"%";
+document.getElementById("distributionValue").innerText=distribution+"%";
+document.getElementById("buyPressureValue").innerText=buy;
+document.getElementById("sellPressureValue").innerText=sell;
+
+}
+
+function updateLiveScanner(){
+
+let random=
+liveSignals[Math.floor(Math.random()*liveSignals.length)];
+
+document.getElementById("scannerStatus").innerText=
+random.status;
+
+document.getElementById("scannerDesc").innerText=
+random.desc;
+
+}
+
+setInterval(updateLiveScanner,5000);
+
+setInterval(rotateOceanStatus,5000);
+rotateOceanStatus();
+
+setInterval(updateSmartMoneyTracker,6000);
+updateSmartMoneyTracker();
+
+setInterval(updateMarketSentiment,7000);
+updateMarketSentiment();
+
+const aiAlerts=[
+"ETH Alert: Whale pressure rising near resistance zone.",
+"BTC Alert: Liquidity shift detected across major pairs.",
+"SOL Alert: FOMO pressure increasing rapidly.",
+"BNB Alert: Smart money activity detected.",
+"Sardine AI Warning: Meme sector entering high-risk emotional zone.",
+"Market Alert: Sudden volatility spike detected.",
+"Protection Alert: Avoid aggressive entries during liquidity instability."
+];
+
+function showAIAlert(){
+
+let alertText=aiAlerts[Math.floor(Math.random()*aiAlerts.length)];
+
+let box=document.getElementById("aiNotification");
+let text=document.getElementById("aiNotificationText");
+
+text.innerText=alertText;
+
+box.classList.add("show");
+
+setTimeout(()=>{
+box.classList.remove("show");
+},4200);
+
+}
+
+setInterval(showAIAlert,9000);
+const aiFeedMessages=[
+"BTC liquidity rotation detected near key market zone.",
+"ETH whale wallets increasing activity.",
+"SOL volatility expanding. Sardine AI recommends caution.",
+"BNB market pressure changing rapidly.",
+"Market-wide FOMO behavior rising across top assets.",
+"Smart money accumulation pattern detected.",
+"Liquidity instability warning: avoid emotional entries.",
+"Meme sector heating up. Risk of exit liquidity increasing.",
+"News pressure detected. Market may react with volatility.",
+"Whale distribution probability rising."
+];
+
+function addAIFeedItem(){
+
+let feed=document.getElementById("aiFeedList");
+
+if(!feed)return;
+
+let message=aiFeedMessages[Math.floor(Math.random()*aiFeedMessages.length)];
+
+let time=new Date().toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
+
+let item=document.createElement("div");
+
+item.className="ai-feed-item";
+
+item.innerHTML="<span>"+time+"</span><b>"+message+"</b>";
+
+feed.prepend(item);
+
+while(feed.children.length>6){
+feed.removeChild(feed.lastChild);
+}
+
+}
+
+setInterval(addAIFeedItem,6000);
+
+function saveAlertConfig(){
+
+let options=document.querySelectorAll(".alert-option input");
+
+let saved=[];
+
+options.forEach((item,index)=>{
+saved.push({
+index:index,
+checked:item.checked
+});
+});
+
+localStorage.setItem("snaoAlertConfig",JSON.stringify(saved));
+
+fetch("/save-alert",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+user_id:"demo_user",
+asset:document.getElementById("assetSelect").value,
+alert_type:"market_protection"
+})
+});
+
+document.getElementById("alertSaveStatus").innerHTML=
+"✅ Sardine AI alert preferences saved successfully.<br><br>"+
+"Your system will remember these settings when you return.";
+
+}
+function loadAlertConfig(){
+
+let saved=localStorage.getItem("snaoAlertConfig");
+
+if(!saved)return;
+
+let data=JSON.parse(saved);
+
+let options=document.querySelectorAll(".alert-option input");
+
+data.forEach(item=>{
+if(options[item.index]){
+options[item.index].checked=item.checked;
+}
+});
+
+let status=document.getElementById("alertSaveStatus");
+
+if(status){
+status.innerHTML="✅ Saved alert preferences loaded.";
+}
+
+}
+
+loadAlertConfig();
+
+function loadMissionProgress(){
+
+let savedXP=localStorage.getItem("snaoFlowXP");
+let savedLevel=localStorage.getItem("snaoFlowLevel");
+
+if(savedXP){
+document.getElementById("xpFill").style.width=savedXP+"%";
+}
+
+if(savedXP && savedLevel){
+document.getElementById("xpText").innerText=
+"Level "+savedLevel+" • "+savedXP+" / 100 XP";
+}
+
+}
+
+loadMissionProgress();
+
+function loadMissionStatus(){
+
+let analyzeDone=localStorage.getItem("missionAnalyzeDone");
+
+if(analyzeDone==="true"){
+document.getElementById("missionAnalyze").classList.add("done");
+}
+
+let alertDone=localStorage.getItem("missionAlertDone");
+
+if(alertDone==="true"){
+document.getElementById("missionAlert").classList.add("done");
+}
+
+}
+
+loadMissionStatus();
+
+function updateEnergyUI(){
+
+let energy=
+parseInt(localStorage.getItem("snaoEnergy") || "100");
+
+document.getElementById("energyCount").innerText=
+energy+"/100";
+
+document.getElementById("energyFill").style.width=
+energy+"%";
+
+let status="Energy Full";
+
+if(energy<=20){
+status="Low Energy";
+}else if(energy<=50){
+status="Energy Recovering";
+}else if(energy<=80){
+status="Stable Energy";
+}
+
+document.getElementById("energyStatus").innerText=status;
+
+}
+
+function regenerateEnergy(){
+
+let energy=
+parseInt(localStorage.getItem("snaoEnergy") || "100");
+
+if(energy<100){
+
+energy+=2;
+
+if(energy>100){
+energy=100;
+}
+
+localStorage.setItem("snaoEnergy",energy);
+
+updateEnergyUI();
+
+}
+
+}
+
+setInterval(regenerateEnergy,15000);
+
+updateEnergyUI();
+
+function filterAssets(){
+
+let search=document.getElementById("assetSearch").value.toUpperCase();
+
+let select=document.getElementById("assetSelect");
+
+let options=select.options;
+
+for(let i=0;i<options.length;i++){
+
+let text=options[i].text.toUpperCase();
+
+let value=options[i].value.toUpperCase();
+
+if(text.includes(search) || value.includes(search)){
+
+options[i].style.display="block";
+
+}else{
+
+options[i].style.display="none";
+
+}
+
+}
+
+}
+
+function updateFlowIntensity(){
+
+let score=Math.floor(Math.random()*100);
+
+let fill=document.getElementById("flowIntensityFill");
+let text=document.getElementById("flowIntensityText");
+
+if(!fill || !text)return;
+
+fill.style.width=score+"%";
+
+if(score>=80){
+text.innerText="Extreme ocean pressure detected.";
+}else if(score>=60){
+text.innerText="Strong liquidity movement detected.";
+}else if(score>=40){
+text.innerText="Moderate flow activity.";
+}else{
+text.innerText="Calm ocean flow.";
+}
+
+}
+
+setInterval(updateFlowIntensity,4000);
+updateFlowIntensity();
+
+function updateOceanStatusPanel(){
+
+let market=document.getElementById("statusMarketFlow");
+let whale=document.getElementById("statusWhalePressure");
+let trap=document.getElementById("statusTrapRisk");
+let mode=document.getElementById("statusSardineMode");
+
+if(!market || !whale || !trap || !mode)return;
+
+let flows=["Inflow","Outflow","Rotation","Stable"];
+let whales=["Low","Moderate","High","Extreme"];
+let traps=["Low","Medium","High","Critical"];
+let modes=["Protect","Observe","Avoid FOMO","Wait"];
+
+market.innerText=flows[Math.floor(Math.random()*flows.length)];
+whale.innerText=whales[Math.floor(Math.random()*whales.length)];
+trap.innerText=traps[Math.floor(Math.random()*traps.length)];
+mode.innerText=modes[Math.floor(Math.random()*modes.length)];
+
+}
+
+setInterval(updateOceanStatusPanel,4500);
+updateOceanStatusPanel();
+
+function startAIWatch(){
+
+showToast("🧠 Sardine AI scanning market flow...");
+
+let alerts=document.getElementById("liveAlerts");
+
+if(alerts){
+
+alerts.innerHTML=`
+
+<div class="live-item danger">
+⚠️ Whale accumulation detected near liquidity trap zone
+</div>
+
+<div class="live-item flow">
+🌊 Retail FOMO pressure rising rapidly
+</div>
+
+<div class="live-item smart">
+💰 Smart money inflow detected in defensive assets
+</div>
+
+`;
+
+}
+
+}
+
+function updateOceanPulse(){
+
+const flow=Math.floor(Math.random()*100);
+
+const fill=document.getElementById("flowIntensityFill");
+const text=document.getElementById("flowIntensityText");
+
+const whale=document.getElementById("statusWhalePressure");
+const trap=document.getElementById("statusTrapRisk");
+const market=document.getElementById("statusMarketFlow");
+
+if(fill){
+fill.style.width=flow+"%";
+}
+
+if(flow<35){
+
+text.innerText="🟢 Calm ocean movement detected";
+market.innerText="Stable";
+whale.innerText="Low";
+trap.innerText="Low";
+
+}
+
+else if(flow<70){
+
+text.innerText="🟡 Increasing smart money movement";
+market.innerText="Active";
+whale.innerText="Medium";
+trap.innerText="Moderate";
+
+}
+
+else{
+
+text.innerText="🔴 High turbulence and whale pressure";
+market.innerText="Aggressive";
+whale.innerText="High";
+trap.innerText="Extreme";
+
+}
+
+}
+
+setInterval(updateOceanPulse,3000);
+
+setInterval(updateAISystem,5000);
+
+function updateAISystem(){
+
+const alerts=[
+"⚠ Whale activity increasing near resistance",
+"🌊 Liquidity rotating into altcoins",
+"🧠 Smart money accumulation detected",
+"🚨 Retail FOMO entering danger zone",
+"🐋 Large wallet movement detected",
+"📉 Weak hands exiting positions",
+"🔥 Momentum building across meme sector"
+];
+
+const sentiments=[
+{
+emoji:"😨",
+title:"Fear Dominating",
+desc:"Retail traders showing uncertainty and hesitation.",
+width:"28%"
+},
+{
+emoji:"🧠",
+title:"Smart Accumulation",
+desc:"Whale wallets quietly increasing exposure.",
+width:"61%"
+},
+{
+emoji:"🚀",
+title:"Bullish Expansion",
+desc:"Momentum and liquidity increasing rapidly.",
+width:"82%"
+},
+{
+emoji:"⚠",
+title:"High Volatility",
+desc:"Market conditions becoming unstable.",
+width:"48%"
+}
+];
+
+const randomAlert=alerts[Math.floor(Math.random()*alerts.length)];
+
+const randomSentiment=sentiments[Math.floor(Math.random()*sentiments.length)];
+
+const feed=document.getElementById("aiFeedList");
+
+if(feed){
+
+const div=document.createElement("div");
+
+div.className="ai-feed-item";
+
+div.innerHTML=`
+<span>LIVE</span>
+<b>${randomAlert}</b>
+`;
+
+feed.prepend(div);
+
+while(feed.children.length>6){
+feed.removeChild(feed.lastChild);
+}
+
+}
+
+const emoji=document.getElementById("sentimentEmoji");
+const title=document.getElementById("sentimentTitle");
+const desc=document.getElementById("sentimentDesc");
+const fill=document.getElementById("sentimentFill");
+
+if(emoji) emoji.innerText=randomSentiment.emoji;
+if(title) title.innerText=randomSentiment.title;
+if(desc) desc.innerText=randomSentiment.desc;
+if(fill) fill.style.width=randomSentiment.width;
+
+}
+
+window.addEventListener("error",function(event){
+
+console.warn("SNAO FlowMap protected error:",event.message);
+
+const notify=document.getElementById("aiNotification");
+const notifyText=document.getElementById("aiNotificationText");
+
+if(notify && notifyText){
+
+notifyText.innerText="System protected a minor visual error. Flow Map is still running.";
+notify.classList.add("show");
+
+setTimeout(()=>{
+notify.classList.remove("show");
+},3000);
+
+}
+
+});
+
+function safeRun(fn){
+
+try{
+fn();
+}catch(e){
+console.warn("SafeRun blocked error:",e.message);
+}
+
+}
+
+</script>
+
+</body>
+</html>
