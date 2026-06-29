@@ -21,7 +21,7 @@ PAYMENTS_FILE = "payments.json"
 REFERRALS_FILE = "referrals.json"
 ALERTS_FILE = "alerts.json"
 MISSIONS_FILE = "missions.json"
-FRONTEND_DIR = os.path.abspath("frontend")
+FRONTEND_DIR = os.path.abspath("../frontend")
 
 for file in [USERS_FILE, PAYMENTS_FILE, ALERTS_FILE, REFERRALS_FILE, MISSIONS_FILE]:
     if not os.path.exists(file):
