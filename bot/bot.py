@@ -3,7 +3,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 BOT_TOKEN = "8533438456:AAHvKSKE4CpkT21VVi-ox5nasZTQaP0OmQI"
 
-MINI_APP_URL = "https://batting-snap-swinger.ngrok-free.dev/index.html?v=flowmap98"
+MINI_APP_URL = "https://snao-miniapp.onrender.com"
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -12,7 +12,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [
             InlineKeyboardButton(
                 text="🚀 Open SNAO Mini App",
-                web_app=WebAppInfo(url="https://batting-snap-swinger.ngrok-free.dev/index.html?v=flowmap98")
+                web_app=WebAppInfo(url=MINI_APP_URL)
             )
         ]
     ]
