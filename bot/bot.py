@@ -1,7 +1,8 @@
+import os
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-BOT_TOKEN = "8533438456:AAF3B6_MhLoDnPXhi-YSDZT25p1bVMAp02k"
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 MINI_APP_URL = "https://snao-miniapp.onrender.com"
 
